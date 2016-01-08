@@ -1,32 +1,39 @@
-package de.htwg.se.ws1516.fourwinning.view;
+package de.htwg.se.ws1516.fourwinning.view.TUI;
 
 import de.htwg.se.ws1516.fourwinning.controller.impl.*;
 import de.htwg.se.ws1516.fourwinning.controller.*;
+import de.htwg.util.observer.IObserver;
+import de.htwg.util.observer.Event;
 
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import de.htwg.se.ws1516.fourwinning.models.*;
 
-public class Tui {
-	
-	
+public class Tui implements IObserver {
+
+	GameController spiel;
+
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
 	private static Scanner eingabe;
-	GameController spiel;
 	Player eins;
 	Player zwei;
 	Player aktiv = eins;
 	Feld[][] spielfeld;
 	int rows;
 	int columns;
+	String zugerfolgreich;
+	
 
-	public Tui(){	
+	public Tui(GameController spiel) {
+		this.spiel = spiel;
+		spiel.addObserver(this);
 		
 	}
 
 	public void ausgabe(Feld[][] feld, int rows, int columns, Player eins, Player zwei) {
 		LOGGER.setLevel(Level.INFO);
+		System.out.println("Ausgabe");
 		for (int k = 0; k < rows; k++) {
 			for (int l = 0; l < columns; l++) {
 				if (feld[k][l].getSet()) {
@@ -48,27 +55,29 @@ public class Tui {
 		}
 
 	}
-	
-	public void createGameArea(){
+
+	public void createGameArea() {
 		eingabe = new Scanner(System.in);
-		LOGGER.info("Reihen angeben");
-		rows = eingabe.nextInt();
-		LOGGER.info("Spalten angeben");
-		columns = eingabe.nextInt();
-		spiel = new GameController(rows, columns);
-		LOGGER.info(spiel.getStatusText());
+		LOGGER.info("Rows angeben");
+		rows = spiel.getRows();
+		LOGGER.info("Columns angeben");
+		columns = spiel.getColumns();
+		spiel.setRows(rows);
+		spiel.setColumns(columns);
+
 		spiel.baueSpielfeld(rows, columns);
 		LOGGER.info(spiel.getStatusText());
+		LOGGER.info(spiel.getStatusText());
 		
-		
+
 	}
-	
-	
-	public void createPlayers(){
-		LOGGER.info("Name des ersten Spielers angeben");
-		String one = eingabe.next();
-		LOGGER.info("Name des zweiten Spielers angeben");
-		String two = eingabe.next();
+
+	public void createPlayers() {
+		eingabe = new Scanner(System.in);
+		LOGGER.info("Name Spieler eins angeben");
+		String one = spiel.getPlayerOne().getName();
+		LOGGER.info("Name Spieler zwei angeben");
+		String two = spiel.getPlayerTwo().getName();
 		spiel.createPlayers(one, two);
 		LOGGER.info(spiel.getStatusText());
 		eins = spiel.getPlayerOne();
@@ -76,30 +85,32 @@ public class Tui {
 		eins.setActive(true);
 		zwei.setActive(false);
 	}
-	
-	public String playGame(){
 
+	public String playGame() {
+		spielfeld = spiel.update();
+		eingabe = new Scanner(System.in);
 		aktiv = spiel.aktiverSpieler();
 		LOGGER.info(spiel.getStatusText());
-		
-		String rowExplain = String.format(
-				"%nMachen sie Ihren Zug, geben sie dafuer die Column an, zwischen 0 und %d%n", columns - 1);
+
+		String rowExplain = String.format("%nMachen sie Ihren Zug, geben sie dafuer die Column an, zwischen 0 und %d%n",
+				columns - 1);
 		LOGGER.info(rowExplain);
-		spielfeld = spiel.update();
+
 		System.out.println("Um den letzten Zug zu widerholen, geben sie redo ein");
 		String currentColumnString = eingabe.next();
-		if ("redo".equals(currentColumnString)){
+		if ("redo".equals(currentColumnString)) {
 			spiel.redo();
 		} else {
+			spielfeld = spiel.update();
 			int currentColumn = Integer.parseInt(currentColumnString);
-			LOGGER.info(spiel.zug(currentColumn, aktiv));
+			zugerfolgreich = (spiel.zug(currentColumn, aktiv));
+			LOGGER.info(zugerfolgreich);
 		}
-			ausgabe(spielfeld, rows, columns, eins, zwei);
+		spiel.notifyObservers();
 		String whoHasWon = "";
 		if (spiel.spielGewonnen(spielfeld, aktiv)) {
 			whoHasWon = String.format("%n%s hat das Spiel gewonnen!%n", aktiv.getName());
-			
-			
+
 			return whoHasWon;
 		}
 		LOGGER.info(spiel.getStatusText());
@@ -113,35 +124,47 @@ public class Tui {
 		LOGGER.info(draw);
 		LOGGER.info("%n%n Schreibe undo, um den Zug rueckgaengig zu machen, ansonsten beliebige taste %n%n");
 		String undo = eingabe.next();
-		if ("undo".equals(undo)){
+		if ("undo".equals(undo)) {
 			spiel.undo();
 			spielfeld = spiel.update();
 			return "next round";
 		}
+		spiel.notifyObservers(new PlayerChangeEvent());
 		return "next round";
 	}
-	
-	public void spielerwaechsel(Player eins, Player zwei){
+
+	public void spielerwaechsel(Player eins, Player zwei) {
 		spiel.changePlayer(eins, zwei);
 	}
-	
-	public String runGame(){
 
-		if(spiel.getState() instanceof PlayerBuildState){
+	public String runGame() {
+
+		if (spiel.getState() instanceof PlayerBuildState) {
 			createPlayers();
 			spiel.getState().nextState(spiel);
 			return "next round";
-		} else if(spiel.getState() instanceof GameRunningState){
+		} else if (spiel.getState() instanceof GameRunningState) {
 			spiel.getState().nextState(spiel);
-			return playGame();
-		} else if(spiel.getState() instanceof PlayerChangeState){
+			String rueck = playGame();
 			spielerwaechsel(eins,zwei);
+			return rueck;
+		} else if (spiel.getState() instanceof PlayerChangeState) {
+
 			spiel.getState().nextState(spiel);
 			return "next round";
 		}
 		return null;
 	}
-}
-	
-	
 
+	@Override
+	public void update(Event e) {
+		if(e == null){
+			ausgabe(spielfeld, rows, columns, eins, zwei);
+			spiel.changePlayer(eins, zwei);	
+		}else if(e instanceof PlayerChangeEvent){
+			//spiel.changePlayer(eins, zwei);	
+		}
+		}
+
+	
+}

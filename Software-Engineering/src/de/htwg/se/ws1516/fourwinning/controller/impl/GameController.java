@@ -2,11 +2,13 @@ package de.htwg.se.ws1516.fourwinning.controller.impl;
 
 import de.htwg.se.ws1516.fourwinning.models.*;
 import de.htwg.util.*;
+import de.htwg.util.observer.Event;
+import de.htwg.util.observer.Observable;
 import de.htwg.se.ws1516.fourwinning.controller.*;
 
 
 
-public class GameController implements GameInterface {
+public class GameController extends Observable implements GameInterface {
 	private GameStates status = GameStates.WELCOME;
 	private String statusText = "Welcome";
 	private PlayArea spielfeld;
@@ -29,6 +31,7 @@ public class GameController implements GameInterface {
 		this.setColumns(columns);
 		commands = new CreateCommand();
 		state = new PlayerBuildState();
+		
 	}
 	
 	public PlayArea getSpielfeld(){
@@ -50,6 +53,7 @@ public class GameController implements GameInterface {
 		regeln = new RuleController(rows, columns);
 		status = GameStates.CREATE_AREA;
 		statusText = "Area created";
+		
 	}
 
 	@Override
@@ -93,16 +97,19 @@ public class GameController implements GameInterface {
 	 */
 	@Override
 	public Player changePlayer(Player one, Player two) {
+		Event PlayerChangeEvent = new PlayerChangeEvent();
 		if (one.getActive()) {
 			one.setActive(false);
 			two.setActive(true);
+			
 			return two;
         }
         one.setActive(true);
         two.setActive(false);
+  
 		return one;
 		
-	}
+		}
 
 	/*
 	 * Macht den Zug und gibt zurueck ob dieser funktioniert hat
@@ -112,33 +119,48 @@ public class GameController implements GameInterface {
 		save(spielfeld.getFeld(), column);
 		currentColumn = column;
 		int statuszug = spielfeld.setChip(column, p);
-		if (statuszug == -2)
+		if (statuszug == -2){
 			return "Zug fehlgeschlagen";
+		}
 		currentRow = statuszug;
+		notifyObservers();
+		
 		return "Zug erfolgreich";
+		
 	}
 
 	/*
 	 * gibt aktuelles Spielfeld zurueck
 	 */
 	@Override
-	public Feld[][] update() {
+	public Feld[][] update(){
+		
 		return spielfeld.getFeld();
 	}
 
 	@Override
 	public boolean spielGewonnen(Feld[][] feld, Player p) {
+		boolean won = false;
 		this.spielGewonnen = regeln.getWin(feld, p, currentRow, currentColumn);
 		status = GameStates.CHECK_WIN;
 		statusText = "Regeln werden auf Gewinner ueberprueft";
-		return spielGewonnen;
+		notifyObservers(new GameOverEvent());
+		won = spielGewonnen;
+		if (won == true)
+			notifyObservers(new GameOverEvent());
+		return won;
 	}
 
 	@Override
 	public boolean spielDraw(Feld[][] feld) {
+		boolean draw = false;
 		status = GameStates.CHECK_DRAW;
 		statusText = "Regeln werden auf Unentschieden ueberprueft";
-		return regeln.getDraw(feld);
+		notifyObservers(new GameOverEvent());
+		draw = regeln.getDraw(feld);
+		if (draw == true)
+			notifyObservers(new GameOverEvent());
+		return draw;
 	}
 
 	@Override
@@ -154,15 +176,19 @@ public class GameController implements GameInterface {
 	public void undo(){
 		Feld[][] ersatzfeld = commands.undoCommand();
 		spielfeld.setFeld(ersatzfeld);
+		notifyObservers();
 	}
 	
 	public void save(Feld[][] spielfeld, int column){
 		commands.doCommand(spielfeld, column);
+		
 	}
 	
 	public void redo(){
 		int spalte = commands.redoCommand();
 		zug(spalte, aktiverSpieler());
+		
+		
 	}
 
 	public GameStates getStatus(){
@@ -183,9 +209,12 @@ public class GameController implements GameInterface {
 	
 	public void setState(IGameState state) {
         this.state = state;
+        
     }
 	
 	public IGameState getState(){
 		return state;
 	}
+	
+	
 }
