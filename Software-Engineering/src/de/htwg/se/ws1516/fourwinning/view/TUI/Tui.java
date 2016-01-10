@@ -8,11 +8,14 @@ import de.htwg.util.observer.Event;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.google.inject.Inject;
+
 import de.htwg.se.ws1516.fourwinning.models.*;
 
 public class Tui implements IObserver {
 
-	GameController spiel;
+	IGameController spiel;
 
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
 	private static Scanner eingabe;
@@ -20,15 +23,14 @@ public class Tui implements IObserver {
 	Player zwei;
 	Player aktiv = eins;
 	Feld[][] spielfeld;
-	int rows;
-	int columns;
+	int rows = 0;
+	int columns = 0;
 	String zugerfolgreich;
-	
 
-	public Tui(GameController spiel) {
+	@Inject
+	public Tui(IGameController spiel) {
 		this.spiel = spiel;
 		spiel.addObserver(this);
-		
 	}
 
 	public void ausgabe(Feld[][] feld, int rows, int columns, Player eins, Player zwei) {
@@ -58,25 +60,22 @@ public class Tui implements IObserver {
 
 	public void createGameArea() {
 		eingabe = new Scanner(System.in);
-		LOGGER.info("Rows angeben");
+		LOGGER.info("Rows werden von GUI übernommen");
 		rows = spiel.getRows();
-		LOGGER.info("Columns angeben");
+		LOGGER.info("Columns werden von GUI übernommen");
 		columns = spiel.getColumns();
 		spiel.setRows(rows);
 		spiel.setColumns(columns);
 
 		spiel.baueSpielfeld(rows, columns);
 		LOGGER.info(spiel.getStatusText());
-		LOGGER.info(spiel.getStatusText());
-		
-
 	}
 
 	public void createPlayers() {
 		eingabe = new Scanner(System.in);
-		LOGGER.info("Name Spieler eins angeben");
+		LOGGER.info("Spieler eins wird von GUI erstellt");
 		String one = spiel.getPlayerOne().getName();
-		LOGGER.info("Name Spieler zwei angeben");
+		LOGGER.info("Spieler zwei wird von GUI erstellt");
 		String two = spiel.getPlayerTwo().getName();
 		spiel.createPlayers(one, two);
 		LOGGER.info(spiel.getStatusText());
@@ -100,6 +99,7 @@ public class Tui implements IObserver {
 		String currentColumnString = eingabe.next();
 		if ("redo".equals(currentColumnString)) {
 			spiel.redo();
+			spielerwaechsel(eins, zwei);
 		} else {
 			spielfeld = spiel.update();
 			int currentColumn = Integer.parseInt(currentColumnString);
@@ -109,19 +109,18 @@ public class Tui implements IObserver {
 		spiel.notifyObservers();
 		String whoHasWon = "";
 		if (spiel.spielGewonnen(spielfeld, aktiv)) {
-			whoHasWon = String.format("%n%s hat das Spiel gewonnen!%n", aktiv.getName());
-
-			return whoHasWon;
+			
+			return "";
 		}
 		LOGGER.info(spiel.getStatusText());
 		LOGGER.info(whoHasWon);
-		String draw = "";
+		
 		if (spiel.spielDraw(spielfeld)) {
-			draw = "Unentschieden";
-			return draw;
+			
+			return "";
 		}
 		LOGGER.info(spiel.getStatusText());
-		LOGGER.info(draw);
+		LOGGER.info("");
 		LOGGER.info("%n%n Schreibe undo, um den Zug rueckgaengig zu machen, ansonsten beliebige taste %n%n");
 		String undo = eingabe.next();
 		if ("undo".equals(undo)) {
@@ -146,10 +145,9 @@ public class Tui implements IObserver {
 		} else if (spiel.getState() instanceof GameRunningState) {
 			spiel.getState().nextState(spiel);
 			String rueck = playGame();
-			spielerwaechsel(eins,zwei);
+			spielerwaechsel(eins, zwei);
 			return rueck;
 		} else if (spiel.getState() instanceof PlayerChangeState) {
-
 			spiel.getState().nextState(spiel);
 			return "next round";
 		}
@@ -158,13 +156,16 @@ public class Tui implements IObserver {
 
 	@Override
 	public void update(Event e) {
-		if(e == null){
+		if (e == null) {
 			ausgabe(spielfeld, rows, columns, eins, zwei);
-			spiel.changePlayer(eins, zwei);	
-		}else if(e instanceof PlayerChangeEvent){
-			//spiel.changePlayer(eins, zwei);	
+			spiel.changePlayer(eins, zwei);
+		} else if (e instanceof GameOverEvent) {
+			String gameOver = String.format("%n%s hat das Spiel gewonnen!%n", aktiv.getName());
+			LOGGER.info(gameOver);
+		} else if (e instanceof GameDrawEvent){
+			String gameDraw = "Draw";
+			LOGGER.info(gameDraw);
 		}
-		}
+	}
 
-	
 }

@@ -1,29 +1,32 @@
 package de.htwg.se.ws1516.fourwinning;
 
-import java.util.Scanner;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import java.util.logging.Level;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import de.htwg.se.ws1516.fourwinning.view.TUI.*;
-import de.htwg.se.ws1516.fourwinning.controller.GameInterface;
+import de.htwg.se.ws1516.fourwinning.controller.IGameController;
 import de.htwg.se.ws1516.fourwinning.controller.impl.GameController;
 import de.htwg.se.ws1516.fourwinning.view.GUI.*;
 
 public class FourWinning {
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
 	private Tui TextUI;
-	private Gui GraphicUI;
+	protected IGameController controller;
 	private static FourWinning instance;
 	public GameController spiel;
-	private Scanner eingabe;
 	int rows;
 	int columns;
 
 	private FourWinning() throws IOException {
-		spiel = new GameController(0,0);
-		TextUI = new Tui(spiel);
-		new Gui(spiel);
+		Injector injector = Guice.createInjector(new FourWinningModule());
+		controller = injector.getInstance(IGameController.class);
+		
+		TextUI = new Tui(controller);
+		new Gui(controller);
 		instance = null;
 	}
 

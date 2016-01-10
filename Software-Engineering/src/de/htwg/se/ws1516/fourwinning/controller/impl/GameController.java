@@ -2,16 +2,19 @@ package de.htwg.se.ws1516.fourwinning.controller.impl;
 
 import de.htwg.se.ws1516.fourwinning.models.*;
 import de.htwg.util.*;
-import de.htwg.util.observer.Event;
 import de.htwg.util.observer.Observable;
+
+import com.google.inject.Inject;
+
 import de.htwg.se.ws1516.fourwinning.controller.*;
 
 
 
-public class GameController extends Observable implements GameInterface {
+public class GameController extends Observable implements IGameController {
 	private GameStates status = GameStates.WELCOME;
 	private String statusText = "Welcome";
-	private PlayArea spielfeld;
+	private PlayAreaInterface grid;
+	private IPlayerAreaFactory gridfactory;
 	private Player one;
 	private Player two;
 	int mengeOne;
@@ -26,20 +29,19 @@ public class GameController extends Observable implements GameInterface {
 	private IGameState state;
 	
 	
-	public GameController(int rows, int columns) {
-		this.setRows(rows);
-		this.setColumns(columns);
-		commands = new CreateCommand();
-		state = new PlayerBuildState();
+	@Inject
+	public GameController(IPlayerAreaFactory playfactory) {
+		this.gridfactory = playfactory;
+		
 		
 	}
 	
-	public PlayArea getSpielfeld(){
-		return spielfeld;
+	public PlayAreaInterface getSpielfeld(){
+		return grid;
 	}
 	
-	public void setSpielfeld(PlayArea spielfeld){
-		this.spielfeld = spielfeld;
+	public void setSpielfeld(PlayAreaInterface grid){
+		this.grid = grid;
 	}
 	
 	@Override
@@ -47,7 +49,7 @@ public class GameController extends Observable implements GameInterface {
 		
 		this.setRows(rows);
 		this.setColumns(columns);
-		spielfeld = new PlayArea(rows, columns);
+		grid = gridfactory.create(rows, columns);
 		mengeOne = (rows * columns / 2 + 1);
 		mengeTwo = (rows * columns / 2);
 		regeln = new RuleController(rows, columns);
@@ -58,6 +60,8 @@ public class GameController extends Observable implements GameInterface {
 
 	@Override
 	public void createPlayers(String nameOne, String nameTwo) {
+		commands = new CreateCommand();
+		state = new PlayerBuildState();
 		one = new Player(nameOne, mengeOne);
 		two = new Player(nameTwo, mengeTwo);
 		one.setActive(true);
@@ -97,7 +101,7 @@ public class GameController extends Observable implements GameInterface {
 	 */
 	@Override
 	public Player changePlayer(Player one, Player two) {
-		Event PlayerChangeEvent = new PlayerChangeEvent();
+		
 		if (one.getActive()) {
 			one.setActive(false);
 			two.setActive(true);
@@ -116,10 +120,11 @@ public class GameController extends Observable implements GameInterface {
 	 */
 	@Override
 	public String zug(int column, Player p) {
-		save(spielfeld.getFeld(), column);
+		save(grid.getFeld(), column);
 		currentColumn = column;
-		int statuszug = spielfeld.setChip(column, p);
+		int statuszug = grid.setChip(column, p);
 		if (statuszug == -2){
+			
 			return "Zug fehlgeschlagen";
 		}
 		currentRow = statuszug;
@@ -135,7 +140,7 @@ public class GameController extends Observable implements GameInterface {
 	@Override
 	public Feld[][] update(){
 		
-		return spielfeld.getFeld();
+		return grid.getFeld();
 	}
 
 	@Override
@@ -144,10 +149,12 @@ public class GameController extends Observable implements GameInterface {
 		this.spielGewonnen = regeln.getWin(feld, p, currentRow, currentColumn);
 		status = GameStates.CHECK_WIN;
 		statusText = "Regeln werden auf Gewinner ueberprueft";
-		notifyObservers(new GameOverEvent());
+		
 		won = spielGewonnen;
-		if (won == true)
+		if (won == true){
 			notifyObservers(new GameOverEvent());
+			
+		}
 		return won;
 	}
 
@@ -156,10 +163,12 @@ public class GameController extends Observable implements GameInterface {
 		boolean draw = false;
 		status = GameStates.CHECK_DRAW;
 		statusText = "Regeln werden auf Unentschieden ueberprueft";
-		notifyObservers(new GameOverEvent());
+		
 		draw = regeln.getDraw(feld);
-		if (draw == true)
-			notifyObservers(new GameOverEvent());
+		if (draw == true){
+			notifyObservers(new GameDrawEvent());
+			
+		}
 		return draw;
 	}
 
@@ -175,19 +184,19 @@ public class GameController extends Observable implements GameInterface {
 	
 	public void undo(){
 		Feld[][] ersatzfeld = commands.undoCommand();
-		spielfeld.setFeld(ersatzfeld);
+		grid.setFeld(ersatzfeld);
 		notifyObservers();
 	}
 	
-	public void save(Feld[][] spielfeld, int column){
-		commands.doCommand(spielfeld, column);
+	public void save(Feld[][] grid, int column){
+		commands.doCommand(grid, column);
 		
 	}
 	
 	public void redo(){
 		int spalte = commands.redoCommand();
 		zug(spalte, aktiverSpieler());
-		
+		notifyObservers();
 		
 	}
 

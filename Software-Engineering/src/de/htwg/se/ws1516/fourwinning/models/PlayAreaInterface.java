@@ -5,5 +5,6 @@ public interface PlayAreaInterface {
 	int setChip(int column, Player p);
 	int getColumns();
 	int getRows();
+	void setFeld(Feld[][] zusatzfeld);
 	Feld[][] getFeld();
 }

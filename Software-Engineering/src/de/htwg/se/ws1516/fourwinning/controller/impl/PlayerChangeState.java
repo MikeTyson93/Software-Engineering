@@ -5,7 +5,7 @@ import de.htwg.se.ws1516.fourwinning.controller.*;
 public class PlayerChangeState implements IGameState{
 	
 	@Override
-	public void nextState(GameController game){
+	public void nextState(IGameController game){
 		game.setState(new GameRunningState());
 	}
 }

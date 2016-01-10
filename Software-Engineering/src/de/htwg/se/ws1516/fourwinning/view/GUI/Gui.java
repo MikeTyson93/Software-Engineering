@@ -4,20 +4,19 @@
  */
 package de.htwg.se.ws1516.fourwinning.view.GUI;
 
-import de.htwg.se.ws1516.fourwinning.controller.impl.GameController;
+import de.htwg.se.ws1516.fourwinning.controller.IGameController;
+import de.htwg.se.ws1516.fourwinning.controller.impl.GameDrawEvent;
 import de.htwg.se.ws1516.fourwinning.controller.impl.GameOverEvent;
-import de.htwg.se.ws1516.fourwinning.controller.impl.GameRunningState;
-import de.htwg.se.ws1516.fourwinning.controller.impl.PlayerBuildState;
-import de.htwg.se.ws1516.fourwinning.controller.impl.PlayerChangeEvent;
-import de.htwg.se.ws1516.fourwinning.controller.impl.PlayerChangeState;
 import de.htwg.se.ws1516.fourwinning.models.Feld;
 import de.htwg.se.ws1516.fourwinning.models.Player;
 import de.htwg.util.observer.Event;
 import de.htwg.util.observer.IObserver;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.*;
+
+import com.google.inject.Inject;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 	private GameMatrix gm;
 	private int rows;
 	private int columns;
-	private GameController spiel;
+	private IGameController spiel;
 	private Player eins;
 	private Player zwei;
 	private Player aktiv;
@@ -51,13 +50,14 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 
 	// static int[] hoehe;
 
-
-	public Gui(GameController spiel) throws IOException{
+	@Inject
+	public Gui(IGameController spiel) throws IOException{
+		this.spiel = spiel;
 		createGameArea(spiel);
 		spiel.addObserver(this);
 	}
 
-	public void createGameArea(GameController spiel) throws IOException {
+	public void createGameArea(IGameController spiel) throws IOException {
 		// Anzahl Spalten und Reihen und GUI bauen
 		try {
 			this.spiel=spiel;
@@ -98,7 +98,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 			this.setLayout(new BorderLayout());
 			this.setLocationRelativeTo(null);
 		} catch (Exception x) {
-			JOptionPane.showMessageDialog(null, "Ungültige Spielparameter eingegeben", "Fehler",
+			JOptionPane.showMessageDialog(null, "Ungueltige Spielparameter eingegeben", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
@@ -139,6 +139,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
+		
 	}
 
 	/*
@@ -198,44 +199,39 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 				aktiv = spiel.aktiverSpieler();
 				spiel.zug(i, aktiv);
 				
-
-				String whoHasWon = "";
 				if (spiel.spielGewonnen(spielfeld, aktiv)) {
-					whoHasWon = String.format("%n%s hat das Spiel gewonnen!%n", aktiv.getName());
-
-					JOptionPane.showMessageDialog(null, whoHasWon, "Gewinner: " + aktiv.getName(),
-							JOptionPane.INFORMATION_MESSAGE);
-					
-					return;
-				}
-				String draw;
-				if (spiel.spielDraw(spielfeld)) {
-					draw = "Unentschieden";
-					JOptionPane.showMessageDialog(null, draw, "Unentschieden", JOptionPane.INFORMATION_MESSAGE);
 					
 					return;
 				}
 				
-				spielerwaechsel();
-			
+				if (spiel.spielDraw(spielfeld)) {
+					
+					return;
+				}
+				
+				
 				lSpieler.setText(spiel.aktiverSpieler().getName() + " ist am Zug!");
 
 			}
-			spiel.notifyObservers(new PlayerChangeEvent());
+			
 		}
 
-	}
-
-	public void spielerwaechsel() {
-		
-		//spiel.getState().nextState(spiel);
 	}
 	
 	@Override
 	public void update(Event e) {
 		if(e == null){
 			ausgabe(spielfeld, rows, columns, eins, zwei);
-		} 
+		} else if (e instanceof GameOverEvent){
+			String gameOver = String.format("%n%s hat das Spiel gewonnen!%n", aktiv.getName());
+
+			JOptionPane.showMessageDialog(null,gameOver, "Gewinner: " + aktiv.getName(),
+					JOptionPane.INFORMATION_MESSAGE);
+		} else if (e instanceof GameDrawEvent){
+			JOptionPane.showMessageDialog(null, "Game Draw!", "",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
 	}
 	
 

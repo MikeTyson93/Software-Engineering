@@ -8,9 +8,9 @@ package de.htwg.se.ws1516.fourwinning.view.GUI;
 import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+
 import java.awt.image.BufferedImage;
-import java.util.Locale;
+
 import javax.imageio.ImageIO;
 
 public class GameMatrix extends JPanel {
