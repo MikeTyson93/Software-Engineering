@@ -192,12 +192,12 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 				
 				if (spiel.spielGewonnen(spielfeld, aktiv)) {
 					
-					return;
+					System.exit(0);
 				}
 				
 				if (spiel.spielDraw(spielfeld)) {
 					
-					return;
+					System.exit(0);
 				}
 				
 				

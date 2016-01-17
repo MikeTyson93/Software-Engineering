@@ -205,6 +205,13 @@ public class GameControllerTest {
 		g.removeAllObservers();
 		assertEquals(g.getObserverList().isEmpty(), true);
 	}
+	
+	@Test
+	public void testNotDraw(){
+		g.baueSpielfeld(2, 1);
+		g.zug(0, p1);
+		assertEquals(g.spielDraw(g.update()), false);
+	}
 
 	
 

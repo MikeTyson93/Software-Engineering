@@ -35,26 +35,21 @@ public class RuleController implements RuleInterface {
 		try {
 			while (i + 1 < column) {
 				if (feld[currentRow][i].getOwner() != null
-						&& feld[currentRow][i + 1].getOwner() != null) {
-					if (feld[currentRow][i].getOwner().equals(p)
-							&& feld[currentRow][i + 1].getOwner().equals(p)) {
+						&& feld[currentRow][i + 1].getOwner() != null
+						&& feld[currentRow][i].getOwner().equals(p)
+						&& feld[currentRow][i + 1].getOwner().equals(p)) 
+					{
 						numbers++;
 						i++;
 						if (numbers > fourInRowCounter) {
 							fourInRowCounter = numbers;
 						}
 						continue;
-					} else {
-						numbers = 1;
-						i++;
-						continue;
 					}
-				} else {
 					numbers = 1;
 					i++;
 					continue;
-				}
-
+					
 			}
 
 			if (numbers > fourInRowCounter) {
@@ -77,26 +72,22 @@ public class RuleController implements RuleInterface {
 		int i = 0;
 		try {
 			while (i + 1 < row) {
-				if (feld[i][currentColumn].getOwner() != null
-						&& feld[i + 1][currentColumn].getOwner() != null) {
-					if (feld[i][currentColumn].getOwner().equals(p)
-							&& feld[i + 1][currentColumn].getOwner().equals(p)) {
+				if ((feld[i][currentColumn].getOwner() != null
+						&& feld[i + 1][currentColumn].getOwner() != null) 
+						&& feld[i][currentColumn].getOwner().equals(p)
+						&& feld[i + 1][currentColumn].getOwner().equals(p)) {
 						numbers++;
 						i++;
 						if (numbers > fourInColumnCounter) {
 							fourInColumnCounter = numbers;
 						}
 						continue;
-					} else {
-						numbers = 1;
-						i++;
-						continue;
-					}
-				} else {
+					
+				}
 					numbers = 1;
 					i++;
 					continue;
-				}
+				
 
 			}
 
@@ -143,23 +134,20 @@ public class RuleController implements RuleInterface {
 			}
 			while (i + 1 < row && j + 1 < column) {
 				if (feld[i][j].getOwner() != null
-						&& feld[i + 1][j + 1].getOwner() != null) {
-					if (feld[i][j].getOwner().equals(p)
-							&& feld[i + 1][j + 1].getOwner().equals(p)) {
+						&& feld[i + 1][j + 1].getOwner() != null
+						&& (feld[i][j].getOwner().equals(p)
+							&& feld[i + 1][j + 1].getOwner().equals(p)))  {
+					{
 						numbers++;
 						i++;
 						j++;
 						if (numbers > fourInDiagonalCounterOne)
 							fourInDiagonalCounterOne = numbers;
 						continue;
-					} else {
-						numbers = 1;
-						break;
 					}
-				} else {
+				}
 					numbers = 1;
 					break;
-				}
 			}
 			if (numbers > fourInDiagonalCounterOne) {
 				fourInDiagonalCounterOne = numbers;
@@ -191,9 +179,10 @@ public class RuleController implements RuleInterface {
 			}
 			while (i + 1 < row && j - 1 >= 0) {
 				if (feld[i][j].getOwner() != null
-						&& feld[i + 1][j - 1].getOwner() != null) {
-					if (feld[i][j].getOwner().equals(p)
-							&& feld[i + 1][j - 1].getOwner().equals(p)) {
+						&& feld[i + 1][j - 1].getOwner() != null
+						&& feld[i][j].getOwner().equals(p)
+						&& feld[i + 1][j - 1].getOwner().equals(p)) {
+					{
 						numbers++;
 						i++;
 						j--;
@@ -201,14 +190,11 @@ public class RuleController implements RuleInterface {
 							fourInDiagonalCounterTwo = numbers;
 						}
 						continue;
-					} else {
-						numbers = 1;
-						break;
 					}
-				} else {
+				}
 					numbers = 1;
 					break;
-				}
+				
 
 			}
 			if (numbers > fourInDiagonalCounterTwo) {

@@ -10,7 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.htwg.se.ws1516.fourwinning.FourWinningModule;
-import de.htwg.se.ws1516.fourwinning.controller.impl.GameController;
 import de.htwg.se.ws1516.fourwinning.controller.impl.RuleController;
 import de.htwg.se.ws1516.fourwinning.models.Feld;
 import de.htwg.se.ws1516.fourwinning.models.Player;
