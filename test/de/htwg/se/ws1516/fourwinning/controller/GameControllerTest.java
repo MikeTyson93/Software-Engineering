@@ -2,6 +2,8 @@ package de.htwg.se.ws1516.fourwinning.controller;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,7 +13,10 @@ import com.google.inject.Injector;
 
 import de.htwg.se.ws1516.fourwinning.FourWinningModule;
 import de.htwg.se.ws1516.fourwinning.controller.impl.AreaBuildState;
+import de.htwg.se.ws1516.fourwinning.controller.impl.PlayerChangeEvent;
 import de.htwg.se.ws1516.fourwinning.models.Player;
+import de.htwg.util.observer.IObserver;
+import de.htwg.util.observer.Observable;
 
 public class GameControllerTest {
 	private static IGameController g;
@@ -148,6 +153,8 @@ public class GameControllerTest {
 		assertEquals(g.getState().toString(), "GameRunningState");
 		g.getState().nextState(g);
 		assertEquals(g.getState().toString(), "PlayerChangeState");
+		g.getState().nextState(g);
+		assertEquals(g.getState().toString(), "GameRunningState");
 	}
 	
 	@Test
@@ -159,16 +166,17 @@ public class GameControllerTest {
 	
 	@Test
 	public void testeRedo(){
+		
 		g.baueSpielfeld(4, 4);
-		g.zug(0, p1);
 		g.redo();
+		assertEquals(g.update()[3][0].getSet(), true);
+		g.zug(0, p1);
 		g.zug(1, p1);
+		assertEquals(g.spielGewonnen(g.update(), p1), false);
 		g.redo();
 		g.zug(2, p1);
 		g.redo();
 		g.zug(3, p1);
-		assertEquals(g.spielGewonnen(g.update() , p1), true);
-		
 	}
 	
 	@Test
@@ -182,9 +190,21 @@ public class GameControllerTest {
 		g.undo();
 		g.zug(0, p1);
 		assertEquals(g.spielGewonnen(g.update() , p1), true);
-
 	}
 	
+	@Test
+	public void playerChangeEvent(){
+		PlayerChangeEvent pce = new PlayerChangeEvent();
+		assertTrue(pce instanceof PlayerChangeEvent);
+	}
+
+	@Test
+	public void testObserver(){
+		g.baueSpielfeld(4, 4);
+		g.notifyObservers();
+		g.removeAllObservers();
+		assertEquals(g.getObserverList().isEmpty(), true);
+	}
 
 	
 

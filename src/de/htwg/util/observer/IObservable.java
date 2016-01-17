@@ -1,5 +1,7 @@
 package de.htwg.util.observer;
 
+import java.util.List;
+
 public interface IObservable {
 
 	void addObserver (IObserver s);
@@ -11,4 +13,6 @@ public interface IObservable {
 	void notifyObservers();
 	
 	void notifyObservers(Event e);
+	
+	List<IObserver> getObserverList();
 }

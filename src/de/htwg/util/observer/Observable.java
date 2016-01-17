@@ -33,4 +33,8 @@ public class Observable implements IObservable{
 	public void notifyObservers() {
 		notifyObservers(null);
 	}
+	
+	public List<IObserver> getObserverList(){
+		return subscribers;
+	}
 }
