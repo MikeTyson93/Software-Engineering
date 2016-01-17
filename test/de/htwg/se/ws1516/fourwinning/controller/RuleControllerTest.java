@@ -48,6 +48,7 @@ public class RuleControllerTest {
 	@Test
 	public void testFourInRow() {
 		g.baueSpielfeld(4, 4);
+		assertEquals(1,r.fourInRow(3, g.update(), p1));
 		g.zug(0, p1);
 		assertEquals(1, r.fourInRow(3, g.update(), p1));
 		g.zug(1, p2);
@@ -59,11 +60,22 @@ public class RuleControllerTest {
 		g.zug(2, p1);
 		g.zug(3, p1);
 		assertEquals(4, r.fourInRow(2, g.update(), p1));
+		g.baueSpielfeld(10, 10);
+		g.zug(0, p1);
+		g.zug(1, p1);
+		g.zug(2, p1);
+		g.zug(3, p2);
+		g.zug(4, p1);
+		g.zug(5, p1);
+		g.zug(6, p1);
+		g.zug(7, p1);
+		
 	}
 
 	@Test
 	public void testFourInColumn() {
 		g.baueSpielfeld(4, 4);
+		assertEquals(1, r.fourInColumn(0, g.update(), p1));
 		g.zug(0, p1);
 		assertEquals(1, r.fourInColumn(0, g.update(), p1));
 		g.zug(0, p2);
@@ -73,17 +85,30 @@ public class RuleControllerTest {
 		g.zug(1, p1);
 		g.zug(1, p1);
 		assertEquals(4, r.fourInColumn(1, g.update(), p1));
+		g.baueSpielfeld(10, 10);
+		g.zug(0,p1);
+		g.zug(0,p1);
+		g.zug(0,p1);
+		g.zug(0,p1);
+		g.zug(0,p2);
+		g.zug(0,p1);
+		g.zug(0,p1);
+		g.zug(0,p1);
+		assertEquals(4,r.fourInColumn(0, g.update(), p1));
+		
 	}
 
 	@Test
 	public void testFourDiagonalLeftToRight() {
 		g.baueSpielfeld(5,5);
+		assertTrue(1 == r.fourDiagLeftToRight(g.update(), p1, 0, 4));
 		g.zug(1, p1);
 		g.zug(1, p2);
 		g.zug(1, p1);
 		g.zug(2, p2);
 		g.zug(4, p1);
 		g.zug(3, p2);
+		assertEquals(false, r.fourDiagonal(g.update(), p2,4, 3));
 		g.zug(1, p1);
 		g.zug(2, p2);
 		g.zug(2, p1);
@@ -102,6 +127,49 @@ public class RuleControllerTest {
 	}
 	
 	@Test
+	public void testFourDiagonalLeftToRight2() {
+        g.baueSpielfeld(10, 10);
+        g.zug(0, p1);
+        g.zug(1, p1);
+        g.zug(1, p1);
+        g.zug(2, p1);
+        g.zug(2, p1);
+        g.zug(2, p1);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p1);
+        g.zug(3, p2);
+        g.zug(4, p1);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(6, p2);
+        g.zug(6, p1);
+        g.zug(6, p2);
+        g.zug(6, p1);
+        g.zug(6, p2);
+        g.zug(6, p1);
+        g.zug(6, p1); 
+        g.zug(7, p2);
+        g.zug(7, p1);
+        g.zug(7, p2);
+        g.zug(7, p1);
+        g.zug(7, p2);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        assertTrue(4 == r.fourDiagRightToLeft(g.update(), p1, 2, 7));
+        
+	}
+	
+	@Test
 	public void testHilfeLeftToRight(){
 		g.baueSpielfeld(1, 1);
 		g.zug(0, p1);
@@ -109,6 +177,13 @@ public class RuleControllerTest {
 		List<Integer> test = r.helpFourDiagLeftToRight(g.update(), p1, 0, 0);
 		assertTrue(test.get(0) == 0);
 		assertTrue(test.get(1) == 0);
+		g.baueSpielfeld(4, 4);
+		g.zug(0, p1);
+		g.zug(1, p1);
+		g.zug(1, p2);
+		List<Integer> test3 = r.helpFourDiagLeftToRight(g.update(), p2, 2, 1);
+		assertTrue(test3.get(0) == 2);
+		assertTrue(test3.get(1) == 1);
 	}
 	
 	@Test
@@ -119,12 +194,21 @@ public class RuleControllerTest {
 		List<Integer> test = r.helpFourDiagRightToLeft(g.update(), p1, 0, 0);
 		assertTrue(test.get(0) == 0);
 		assertTrue(test.get(1) == 0);
+		g.baueSpielfeld(4, 4);
+		g.zug(3, p1);
+		g.zug(2, p1);
+		g.zug(2, p2);
+		List<Integer> test2 = r.helpFourDiagRightToLeft(g.update(), p2, 2 , 2);
+		assertTrue(test2.get(0) == 2);
+		assertTrue(test2.get(1) == 2);
+		
 	}
 	
     
     @Test
     public void testFourDiagonalRightToLeft(){
         g.baueSpielfeld(5,5);
+//        assertTrue(1 == r.fourDiagRightToLeft(g.update(), p1, 1, 4));
         g.zug(4, p1); 
         g.zug(4,p2);
         g.zug(4,p1);
@@ -145,7 +229,51 @@ public class RuleControllerTest {
         g.zug(0,p1);
         assertEquals(true, r.fourDiagonal(g.update(), p1, 4,0));
         assertEquals(5, r.fourDiagRightToLeft(g.update(), p1, 4, 0));
+        
     }
+    
+    @Test
+    public void testFourDiagonalRightToLeft2(){
+    	g.baueSpielfeld(10, 10);
+        g.zug(9, p1);
+        g.zug(8, p1);
+        g.zug(8, p1);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        g.zug(6, p2);
+        g.zug(6, p2);
+        g.zug(6, p2);
+//        g.zug(6, p2);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p1);
+        g.zug(4, p2);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(4, p1);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(3, p1);
+        g.zug(3, p1);
+        g.zug(3, p1);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p1);
+        g.zug(2, p2);
+        g.zug(2, p2);
+        g.zug(2, p1);
+        g.zug(2, p1);
+        g.zug(2, p2);
+        g.zug(2, p1);
+        g.zug(2, p2);
+        g.zug(2, p1);
+        assertTrue(4 != r.fourDiagLeftToRight(g.update(), p1, 7, 2));
+    }
+    
 	
 	@Test
 	public void testGetDraw() {

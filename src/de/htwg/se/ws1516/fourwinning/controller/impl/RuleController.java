@@ -62,9 +62,7 @@ public class RuleController implements RuleInterface {
 	}
 
 	/*
-	 * Methode berechnet 4 aufeinander liegende Chips und gibt false bzw. true
-	 * zurÃ¼ck wenn 4 aufeinander liegende Chips existieren bzw. nicht
-	 * existieren.
+	 * Methode berechnet 4 aufeinander liegende Chips und gibt Anzahl der Chips zurück.
 	 */
 	@Override
 	public int fourInColumn(int currentColumn, Feld[][] feld, Player p) {
@@ -147,16 +145,13 @@ public class RuleController implements RuleInterface {
 		int i = currentRow;
 		int j = currentColumn;
 		while (i - 1 >= 0 && j - 1 >= 0) {
-			if (feld[i - 1][j - 1].getOwner() != null) {
-				if (feld[i - 1][j - 1].getOwner().equals(p)) {
+			if (feld[i - 1][j - 1].getOwner() != null
+					&& feld[i - 1][j - 1].getOwner().equals(p)) {
 					i--;
 					j--;
 				} else {
 					break;
 				}
-			} else {
-				break;
-			}
 		}
 		List<Integer> help = new LinkedList<>();
 		help.add(i);
@@ -203,17 +198,15 @@ public class RuleController implements RuleInterface {
 		int i = currentRow;
 		int j = currentColumn;
 		while (i - 1 >= 0 && j + 1 < column) {
-			if (feld[i - 1][j + 1].getOwner() != null) {
-				if (feld[i - 1][j + 1].getOwner().equals(p)) {
+			if (feld[i - 1][j + 1].getOwner() != null
+				&& feld[i - 1][j + 1].getOwner().equals(p)) {
 					i--;
 					j++;
 				} else {
 					break;
 				}
-			} else {
-				break;
 			}
-		}
+		
 		List<Integer> help = new LinkedList<>();
 		help.add(i);
 		help.add(j);
