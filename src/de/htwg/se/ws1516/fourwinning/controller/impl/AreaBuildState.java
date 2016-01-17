@@ -8,6 +8,10 @@ public class AreaBuildState implements IGameState {
 	public void nextState(IGameController game){
 		game.setState(new PlayerBuildState());
 	}
+	
+	public String toString(){
+		return "AreaBuildState";
+	}
 
 
 }

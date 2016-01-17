@@ -7,4 +7,8 @@ public class GameRunningState implements IGameState{
 	public void nextState(IGameController game){
 		game.setState(new PlayerChangeState());
 	}
+	
+	public String toString(){
+		return "GameRunningState";
+	}
 }

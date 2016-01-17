@@ -10,7 +10,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import de.htwg.se.ws1516.fourwinning.FourWinningModule;
-
+import de.htwg.se.ws1516.fourwinning.controller.impl.AreaBuildState;
 import de.htwg.se.ws1516.fourwinning.models.Player;
 
 public class GameControllerTest {
@@ -45,21 +45,18 @@ public class GameControllerTest {
 		int spalte = g.getColumns();
 		assertEquals(5, reihe);
 		assertEquals(5, spalte);
+		
 	}
 
 	@Test
 	public void testCreatePlayers() {
-		/*
-		 * Player p = new Player("Hans", 5); assertEquals("Hans", p.getName());
-		 * assertEquals(5, p.getMenge());
-		 */
 		g.createPlayers("Sebastian", "Michael");
 		Player p1 = g.getPlayerOne();
 		assertEquals(p1.getName(), "Sebastian");
 
 		Player p2 = g.getPlayerTwo();
 		assertEquals(p2.getName(), "Michael");
-
+		assertEquals(g.getState().toString(), "PlayerBuildState");
 	}
 
 	@Test
@@ -92,6 +89,7 @@ public class GameControllerTest {
 		g.changePlayer(g.getPlayerTwo(), g.getPlayerOne());
 		p = g.getPlayerOne();
 		assertEquals(p.getName(), "Sebastian");
+		
 	}
 
 	@Test
@@ -136,6 +134,20 @@ public class GameControllerTest {
 		g.baueSpielfeld(2,2);
 		assertEquals(2, g.getRows());
 	}
+	
+	public void testeStates(){
+		g.baueSpielfeld(2, 2);
+		g.setState(new AreaBuildState());
+		assertEquals(g.getState().toString(), "AreaBuildState");
+		g.getState().nextState(g);
+		assertEquals(g.getState().toString(), "PlayerBuildState");
+		g.getState().nextState(g);
+		assertEquals(g.getState().toString(), "GameRunningState");
+		g.getState().nextState(g);
+		assertEquals(g.getState().toString(), "PlayerChangeState");
+	}
+	
+
 	
 
 }

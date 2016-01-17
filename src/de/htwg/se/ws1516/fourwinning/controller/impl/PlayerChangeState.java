@@ -8,4 +8,8 @@ public class PlayerChangeState implements IGameState{
 	public void nextState(IGameController game){
 		game.setState(new GameRunningState());
 	}
+	
+	public String toString(){
+		return "PlayerChangeState";
+	}
 }
