@@ -5,6 +5,9 @@
 package de.htwg.se.ws1516.fourwinning.view.gui;
 
 import de.htwg.se.ws1516.fourwinning.controller.IGameController;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import de.htwg.se.ws1516.fourwinning.controller.impl.GameDrawEvent;
 import de.htwg.se.ws1516.fourwinning.controller.impl.GameOverEvent;
 import de.htwg.se.ws1516.fourwinning.models.Feld;
@@ -46,19 +49,17 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 	private Player zwei;
 	private Player aktiv;
 	private Feld[][] spielfeld;
-	int waechsel = 0;
-
+	private static final Logger LOGGER = Logger.getLogger(Gui.class.getName());
 
 	@Inject
 	public Gui(IGameController spiel) throws IOException{
 		this.spiel = spiel;
-		createGameArea(spiel);
 		spiel.addObserver(this);
 	}
 
-	public void createGameArea(IGameController spiel) throws IOException {
+	public void createGameArea() throws IOException {
 		try {
-			this.spiel=spiel;
+			
 			this.rows = Integer.parseInt(JOptionPane.showInputDialog("Anzahl Reihen"));
 			this.columns = Integer.parseInt(JOptionPane.showInputDialog("Anzahl Spalten"));
 			einwerfenPanel = new JPanel();
@@ -98,6 +99,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Ungueltige Spielparameter eingegeben", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
+			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben");
 			System.exit(1);
 		}
 		createPlayers();
@@ -135,6 +137,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Ungültige Spielparameter eingegeben", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
+			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben");
 			System.exit(1);
 		}
 		
