@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.htwg.se.ws1516.fourwinning.view.GUI;
+package de.htwg.se.ws1516.fourwinning.view.gui;
 
 import de.htwg.se.ws1516.fourwinning.controller.IGameController;
 import de.htwg.se.ws1516.fourwinning.controller.impl.GameDrawEvent;
@@ -48,7 +48,6 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 	private Feld[][] spielfeld;
 	int waechsel = 0;
 
-	// static int[] hoehe;
 
 	@Inject
 	public Gui(IGameController spiel) throws IOException{
@@ -58,7 +57,6 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 	}
 
 	public void createGameArea(IGameController spiel) throws IOException {
-		// Anzahl Spalten und Reihen und GUI bauen
 		try {
 			this.spiel=spiel;
 			this.rows = Integer.parseInt(JOptionPane.showInputDialog("Anzahl Reihen"));
@@ -142,12 +140,6 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		
 	}
 
-	/*
-	 * public void clearFeld() { for (int i = 0; i < rows; i++) { for (int j =
-	 * 0; j < columns; j++) { this.gm.setLeer(i, j); }
-	 * 
-	 * } }
-	 */
 
 	public void setGelb(int rows, int columns) {
 		this.gm.setGelb(rows, columns);
@@ -169,7 +161,6 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 
 	public void playGame(Object quelle) {
 		if (quelle == zugUndo) {
-			// aktiv = spiel.aktiverSpieler();
 			spiel.undo();
 			spielfeld = spiel.update();
 			return;

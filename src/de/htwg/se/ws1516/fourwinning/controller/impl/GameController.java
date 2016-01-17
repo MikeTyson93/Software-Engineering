@@ -35,10 +35,12 @@ public class GameController extends Observable implements IGameController {
 
 	}
 	
+	@Override
 	public PlayAreaInterface getSpielfeld(){
 		return grid;
 	}
 	
+	@Override
 	public void setSpielfeld(PlayAreaInterface grid){
 		this.grid = grid;
 	}
@@ -150,7 +152,7 @@ public class GameController extends Observable implements IGameController {
 		statusText = "Regeln werden auf Gewinner ueberprueft";
 		
 		won = spielGewonnen;
-		if (won == true){
+		if (won){
 			notifyObservers(new GameOverEvent());
 			
 		}
@@ -164,7 +166,7 @@ public class GameController extends Observable implements IGameController {
 		statusText = "Regeln werden auf Unentschieden ueberprueft";
 		
 		draw = regeln.getDraw(feld);
-		if (draw == true){
+		if (draw){
 			notifyObservers(new GameDrawEvent());
 			
 		}
@@ -181,17 +183,20 @@ public class GameController extends Observable implements IGameController {
 		this.rows = rows;
 	}
 	
+	@Override
 	public void undo(){
 		Feld[][] ersatzfeld = commands.undoCommand();
 		grid.setFeld(ersatzfeld);
 		notifyObservers();
 	}
 	
+	@Override
 	public void save(Feld[][] grid, int column){
 		commands.doCommand(grid, column);
 		
 	}
 	
+	@Override
 	public void redo(){
 		int spalte = commands.redoCommand();
 		zug(spalte, aktiverSpieler());
@@ -199,27 +204,33 @@ public class GameController extends Observable implements IGameController {
 		
 	}
 
+	@Override
 	public GameStates getStatus(){
 		return status;
 	}
 
+	@Override
 	public String getStatusText(){
 		return statusText;
 	}
 
+	@Override
 	public int getColumns() {
 		return columns;
 	}
 
+	@Override
 	public void setColumns(int columns) {
 		this.columns = columns;
 	}
 	
+	@Override
 	public void setState(IGameState state) {
         this.state = state;
         
     }
 	
+	@Override
 	public IGameState getState(){
 		return state;
 	}

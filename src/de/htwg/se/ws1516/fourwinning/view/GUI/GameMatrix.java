@@ -1,8 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package de.htwg.se.ws1516.fourwinning.view.GUI;
+
+package de.htwg.se.ws1516.fourwinning.view.gui;
 
 
 import java.io.IOException;
@@ -15,11 +12,7 @@ import javax.imageio.ImageIO;
 
 public class GameMatrix extends JPanel {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1896725534521179915L;
-	//JPanel gameMatrix;
     private int rows;
     private int columns;
     private BufferedImage leer;
@@ -32,18 +25,14 @@ public class GameMatrix extends JPanel {
         this.feldZustand = new int [rows][columns];
         this.rows = rows;
         this.columns = columns;
-        //this.setLayout(null);
+
          leer = ImageIO.read(GameMatrix.class.getResource("leer.gif"));
          rot = ImageIO.read(GameMatrix.class.getResource("rot.gif"));
          gelb = ImageIO.read(GameMatrix.class.getResource("gelb.gif"));
          columnWidth = leer.getWidth();
          rowHeight = leer.getHeight();
-        //gameMatrix = new JPanel();
         this.setLayout(null);
         this.setPreferredSize(new Dimension(columns * columnWidth, rows * rowHeight));
-        //this.setResizable(true);
-        //l1.setIcon(bildLeer);
-        //this.add(l1);
         
         setVisible(true);
     }

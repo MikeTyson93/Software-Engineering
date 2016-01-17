@@ -7,13 +7,13 @@ import java.util.logging.Level;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import de.htwg.se.ws1516.fourwinning.view.TUI.*;
+import de.htwg.se.ws1516.fourwinning.view.gui.*;
+import de.htwg.se.ws1516.fourwinning.view.tui.*;
 import de.htwg.se.ws1516.fourwinning.controller.IGameController;
-import de.htwg.se.ws1516.fourwinning.view.GUI.*;
 
 public class FourWinning {
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
-	private Tui TextUI;
+	private Tui textUI;
 	protected IGameController controller;
 	private static FourWinning instance;
 	int rows;
@@ -23,7 +23,7 @@ public class FourWinning {
 		Injector injector = Guice.createInjector(new FourWinningModule());
 		controller = injector.getInstance(IGameController.class);
 		
-		TextUI = new Tui(controller);
+		textUI = new Tui(controller);
 		new Gui(controller);
 		instance = null;
 	}
@@ -36,17 +36,17 @@ public class FourWinning {
 	}
 
 	public Tui getTui() {
-		return TextUI;
+		return textUI;
 	}
 
 	public static void main(String[] args) {
 		try {
 			LOGGER.setLevel(Level.INFO);
 			FourWinning game = getInstance();
-			game.TextUI.createGameArea();
+			game.textUI.createGameArea();
 			String continu = "next round";
 			while ("next round" == continu) {
-				continu = game.TextUI.runGame();
+				continu = game.textUI.runGame();
 			}
 			LOGGER.info(continu);
 		} catch (java.io.IOException e) {

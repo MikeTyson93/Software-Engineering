@@ -1,4 +1,4 @@
-package de.htwg.se.ws1516.fourwinning.view.TUI;
+package de.htwg.se.ws1516.fourwinning.view.tui;
 
 import de.htwg.se.ws1516.fourwinning.controller.impl.*;
 import de.htwg.se.ws1516.fourwinning.controller.*;
@@ -26,7 +26,8 @@ public class Tui implements IObserver {
 	int rows = 0;
 	int columns = 0;
 	String zugerfolgreich;
-
+	String next = "next round";
+	
 	@Inject
 	public Tui(IGameController spiel) {
 		this.spiel = spiel;
@@ -126,10 +127,10 @@ public class Tui implements IObserver {
 		if ("undo".equals(undo)) {
 			spiel.undo();
 			spielfeld = spiel.update();
-			return "next round";
+			return next;
 		}
 		spiel.notifyObservers(new PlayerChangeEvent());
-		return "next round";
+		return next;
 	}
 
 	public void spielerwaechsel(Player eins, Player zwei) {
@@ -141,7 +142,7 @@ public class Tui implements IObserver {
 		if (spiel.getState() instanceof PlayerBuildState) {
 			createPlayers();
 			spiel.getState().nextState(spiel);
-			return "next round";
+			return next;
 		} else if (spiel.getState() instanceof GameRunningState) {
 			spiel.getState().nextState(spiel);
 			String rueck = playGame();
@@ -149,7 +150,7 @@ public class Tui implements IObserver {
 			return rueck;
 		} else if (spiel.getState() instanceof PlayerChangeState) {
 			spiel.getState().nextState(spiel);
-			return "next round";
+			return next;
 		}
 		return null;
 	}
