@@ -2,12 +2,15 @@ package de.htwg.se.ws1516.fourwinning.controller.impl;
 
 import de.htwg.se.ws1516.fourwinning.models.*;
 import de.htwg.se.ws1516.fourwinning.controller.*;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RuleController implements RuleInterface {
-    private static final Logger LOGGER = Logger.getLogger(RuleController.class.getName());
-    
+	private static final Logger LOGGER = Logger.getLogger(RuleController.class.getName());
+
 	private int column;
 	private int row;
 	int fourInRowCounter = 1;
@@ -29,33 +32,31 @@ public class RuleController implements RuleInterface {
 	 */
 	@Override
 	public int fourInRow(int currentRow, Feld[][] feld, Player p) {
-        LOGGER.setLevel(Level.INFO);
+		LOGGER.setLevel(Level.INFO);
 		int numbers = 1;
 		int i = 0;
 		try {
 			while (i + 1 < column) {
-				if (feld[currentRow][i].getOwner() != null
-						&& feld[currentRow][i + 1].getOwner() != null
-						&& feld[currentRow][i].getOwner().equals(p)
-						&& feld[currentRow][i + 1].getOwner().equals(p)) 
-					{
-						numbers++;
-						i++;
-						if (numbers > fourInRowCounter) {
-							fourInRowCounter = numbers;
-						}
-						continue;
-					}
-					numbers = 1;
+				if (feld[currentRow][i].getOwner() != null && feld[currentRow][i + 1].getOwner() != null
+						&& feld[currentRow][i].getOwner().equals(p) && feld[currentRow][i + 1].getOwner().equals(p)) {
+					numbers++;
 					i++;
+					if (numbers > fourInRowCounter) {
+						fourInRowCounter = numbers;
+					}
 					continue;
-					
+				}
+				numbers = 1;
+				i++;
+				continue;
+
 			}
 
 			if (numbers > fourInRowCounter) {
 				fourInRowCounter = numbers;
 			}
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {LOGGER.log(Level.SEVERE, ausnahme, e);
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
 		return fourInRowCounter;
 	}
@@ -67,76 +68,60 @@ public class RuleController implements RuleInterface {
 	 */
 	@Override
 	public int fourInColumn(int currentColumn, Feld[][] feld, Player p) {
-        LOGGER.setLevel(Level.INFO);
+		LOGGER.setLevel(Level.INFO);
 		int numbers = 1;
 		int i = 0;
 		try {
 			while (i + 1 < row) {
-				if ((feld[i][currentColumn].getOwner() != null
-						&& feld[i + 1][currentColumn].getOwner() != null) 
+				if ((feld[i][currentColumn].getOwner() != null && feld[i + 1][currentColumn].getOwner() != null)
 						&& feld[i][currentColumn].getOwner().equals(p)
 						&& feld[i + 1][currentColumn].getOwner().equals(p)) {
-						numbers++;
-						i++;
-						if (numbers > fourInColumnCounter) {
-							fourInColumnCounter = numbers;
-						}
-						continue;
-					
-				}
-					numbers = 1;
+					numbers++;
 					i++;
+					if (numbers > fourInColumnCounter) {
+						fourInColumnCounter = numbers;
+					}
 					continue;
-				
+
+				}
+				numbers = 1;
+				i++;
+				continue;
 
 			}
 
 			if (numbers > fourInColumnCounter) {
 				fourInColumnCounter = numbers;
 			}
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {LOGGER.log(Level.SEVERE, ausnahme, e);
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
 		return fourInColumnCounter;
 	}
 
 	@Override
-	public boolean fourDiagonal(Feld[][] f, Player p, int currentRow,
-			int currentColumn) {
+	public boolean fourDiagonal(Feld[][] f, Player p, int currentRow, int currentColumn) {
 		if (fourDiagLeftToRight(f, p, currentRow, currentColumn) >= 4
 				|| fourDiagRightToLeft(f, p, currentRow, currentColumn) >= 4) {
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
 
 	@Override
-	public int fourDiagLeftToRight(Feld[][] feld, Player p, int currentRow,
-			int currentColumn) {
-        LOGGER.setLevel(Level.INFO);
+	public int fourDiagLeftToRight(Feld[][] feld, Player p, int currentRow, int currentColumn) {
+		LOGGER.setLevel(Level.INFO);
 		int numbers = 1;
-		int i = currentRow;
-		int j = currentColumn;
+		List<Integer> hilfe = helpFourDiagLeftToRight(feld, p, currentRow, currentColumn);
+		int i = hilfe.get(0);
+		int j = hilfe.get(1);
 		try {
 
-			while (i - 1 >= 0 && j - 1 >= 0) {
-				if (feld[i - 1][j - 1].getOwner() != null) {
-					if (feld[i - 1][j - 1].getOwner().equals(p)) {
-						i--;
-						j--;
-					} else {
-						break;
-					}
-				} else {
-					break;
-				}
-			}
 			while (i + 1 < row && j + 1 < column) {
-				if (feld[i][j].getOwner() != null
-						&& feld[i + 1][j + 1].getOwner() != null
-						&& (feld[i][j].getOwner().equals(p)
-							&& feld[i + 1][j + 1].getOwner().equals(p)))  {
+				if (feld[i][j].getOwner() != null && feld[i + 1][j + 1].getOwner() != null
+						&& (feld[i][j].getOwner().equals(p) && feld[i + 1][j + 1].getOwner().equals(p))) {
 					{
 						numbers++;
 						i++;
@@ -146,42 +131,51 @@ public class RuleController implements RuleInterface {
 						continue;
 					}
 				}
-					numbers = 1;
-					break;
+				numbers = 1;
+				break;
 			}
 			if (numbers > fourInDiagonalCounterOne) {
 				fourInDiagonalCounterOne = numbers;
 			}
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {LOGGER.log(Level.SEVERE, ausnahme, e);
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
 		return fourInDiagonalCounterOne;
 	}
 
-	@Override
-	public int fourDiagRightToLeft(Feld[][] feld, Player p, int currentRow,
-			int currentColumn) {
-        LOGGER.setLevel(Level.INFO);
-		int numbers = 1;
+	public List<Integer> helpFourDiagLeftToRight(Feld[][] feld, Player p, int currentRow, int currentColumn) {
 		int i = currentRow;
 		int j = currentColumn;
-		try {
-			while (i - 1 >= 0 && j + 1 < column) {
-				if (feld[i - 1][j + 1].getOwner() != null) {
-					if (feld[i - 1][j + 1].getOwner().equals(p)) {
-						i--;
-						j++;
-					} else {
-						break;
-					}
+		while (i - 1 >= 0 && j - 1 >= 0) {
+			if (feld[i - 1][j - 1].getOwner() != null) {
+				if (feld[i - 1][j - 1].getOwner().equals(p)) {
+					i--;
+					j--;
 				} else {
 					break;
 				}
+			} else {
+				break;
 			}
+		}
+		List<Integer> help = new LinkedList<>();
+		help.add(i);
+		help.add(j);
+		return help;
+	}
+
+	@Override
+	public int fourDiagRightToLeft(Feld[][] feld, Player p, int currentRow, int currentColumn) {
+		LOGGER.setLevel(Level.INFO);
+		int numbers = 1;
+
+		try {
+			List<Integer> hilfe = helpFourDiagRightToLeft(feld, p, currentRow, currentColumn);
+			int i = hilfe.get(0);
+			int j = hilfe.get(1);
 			while (i + 1 < row && j - 1 >= 0) {
-				if (feld[i][j].getOwner() != null
-						&& feld[i + 1][j - 1].getOwner() != null
-						&& feld[i][j].getOwner().equals(p)
-						&& feld[i + 1][j - 1].getOwner().equals(p)) {
+				if (feld[i][j].getOwner() != null && feld[i + 1][j - 1].getOwner() != null
+						&& feld[i][j].getOwner().equals(p) && feld[i + 1][j - 1].getOwner().equals(p)) {
 					{
 						numbers++;
 						i++;
@@ -192,17 +186,38 @@ public class RuleController implements RuleInterface {
 						continue;
 					}
 				}
-					numbers = 1;
-					break;
-				
+				numbers = 1;
+				break;
 
 			}
 			if (numbers > fourInDiagonalCounterTwo) {
 				fourInDiagonalCounterTwo = numbers;
 			}
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {LOGGER.log(Level.SEVERE, ausnahme, e);
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
 		return fourInDiagonalCounterTwo;
+	}
+
+	public List<Integer> helpFourDiagRightToLeft(Feld[][] feld, Player p, int currentRow, int currentColumn) {
+		int i = currentRow;
+		int j = currentColumn;
+		while (i - 1 >= 0 && j + 1 < column) {
+			if (feld[i - 1][j + 1].getOwner() != null) {
+				if (feld[i - 1][j + 1].getOwner().equals(p)) {
+					i--;
+					j++;
+				} else {
+					break;
+				}
+			} else {
+				break;
+			}
+		}
+		List<Integer> help = new LinkedList<>();
+		help.add(i);
+		help.add(j);
+		return help;
 	}
 
 	@Override
@@ -222,25 +237,24 @@ public class RuleController implements RuleInterface {
 	}
 
 	@Override
-	public boolean getWin(Feld[][] f, Player p, int currentRow,
-			int currentColumn) {
-        LOGGER.setLevel(Level.INFO);
+	public boolean getWin(Feld[][] f, Player p, int currentRow, int currentColumn) {
+		LOGGER.setLevel(Level.INFO);
 		try {
-			if (fourInRow(currentRow, f, p) >= 4
-					|| fourInColumn(currentColumn, f, p) >= 4
+			if (fourInRow(currentRow, f, p) >= 4 || fourInColumn(currentColumn, f, p) >= 4
 					|| fourDiagonal(f, p, currentRow, currentColumn)) {
 				return true;
 			}
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {LOGGER.log(Level.SEVERE, ausnahme, e);
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
 		return false;
 	}
-	
-	public int getColumn(){
+
+	public int getColumn() {
 		return column;
 	}
-	
-	public int getRow(){
+
+	public int getRow() {
 		return row;
 	}
 }

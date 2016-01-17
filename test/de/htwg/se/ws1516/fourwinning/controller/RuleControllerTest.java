@@ -2,6 +2,8 @@ package de.htwg.se.ws1516.fourwinning.controller;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -16,7 +18,6 @@ import de.htwg.se.ws1516.fourwinning.models.Player;
 
 public class RuleControllerTest {
 
-//	private static GameController g;
 	protected static IGameController g;
 	private static RuleController r;
 	private static Player p1;
@@ -99,6 +100,27 @@ public class RuleControllerTest {
         assertEquals(true, r.fourDiagonal(g.update(), p1, 0, 0));
         assertEquals(5, r.fourDiagLeftToRight(g.update(), p1, 0,0));
 	}
+	
+	@Test
+	public void testHilfeLeftToRight(){
+		g.baueSpielfeld(1, 1);
+		g.zug(0, p1);
+		
+		List<Integer> test = r.helpFourDiagLeftToRight(g.update(), p1, 0, 0);
+		assertTrue(test.get(0) == 0);
+		assertTrue(test.get(1) == 0);
+	}
+	
+	@Test
+	public void testHilfeRightToLeft(){
+		g.baueSpielfeld(1, 1);
+		g.zug(0, p1);
+		
+		List<Integer> test = r.helpFourDiagRightToLeft(g.update(), p1, 0, 0);
+		assertTrue(test.get(0) == 0);
+		assertTrue(test.get(1) == 0);
+	}
+	
     
     @Test
     public void testFourDiagonalRightToLeft(){

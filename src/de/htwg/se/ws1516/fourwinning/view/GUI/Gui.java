@@ -174,7 +174,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		}
 
 		if (quelle == close) {
-			System.exit(0);
+			Runtime.getRuntime().halt(0);
 		}
 
 		if (quelle == autor) {
@@ -192,12 +192,12 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 				
 				if (spiel.spielGewonnen(spielfeld, aktiv)) {
 					
-					System.exit(0);
+					Runtime.getRuntime().halt(0);
 				}
 				
 				if (spiel.spielDraw(spielfeld)) {
 					
-					System.exit(0);
+					Runtime.getRuntime().halt(0);
 				}
 				
 				
@@ -221,7 +221,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} else if (e instanceof GameDrawEvent){
 			JOptionPane.showMessageDialog(null, "Game Draw!", "",
 					JOptionPane.ERROR_MESSAGE);
-			System.exit(0);
+			Runtime.getRuntime().halt(0);
 		}
 	}
 	
