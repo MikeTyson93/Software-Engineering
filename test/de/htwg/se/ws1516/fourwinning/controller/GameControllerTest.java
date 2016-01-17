@@ -15,6 +15,7 @@ import de.htwg.se.ws1516.fourwinning.FourWinningModule;
 import de.htwg.se.ws1516.fourwinning.controller.impl.AreaBuildState;
 import de.htwg.se.ws1516.fourwinning.controller.impl.PlayerChangeEvent;
 import de.htwg.se.ws1516.fourwinning.models.Player;
+import de.htwg.util.CreateCommand;
 import de.htwg.util.observer.IObserver;
 import de.htwg.util.observer.Observable;
 
@@ -177,6 +178,9 @@ public class GameControllerTest {
 		g.zug(2, p1);
 		g.redo();
 		g.zug(3, p1);
+		CreateCommand test = new CreateCommand();
+		assertTrue(0 == test.redoCommand());
+		
 	}
 	
 	@Test

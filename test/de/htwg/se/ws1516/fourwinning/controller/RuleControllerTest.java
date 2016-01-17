@@ -312,6 +312,8 @@ public class RuleControllerTest {
     public void testGetWinColumn(){
         
     }
+    
+    
 	
 
 }

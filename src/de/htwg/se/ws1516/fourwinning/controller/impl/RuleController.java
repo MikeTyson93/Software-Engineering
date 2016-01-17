@@ -52,9 +52,7 @@ public class RuleController implements RuleInterface {
 
 			}
 
-			if (numbers > fourInRowCounter) {
-				fourInRowCounter = numbers;
-			}
+			
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
@@ -88,9 +86,6 @@ public class RuleController implements RuleInterface {
 
 			}
 
-			if (numbers > fourInColumnCounter) {
-				fourInColumnCounter = numbers;
-			}
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
@@ -132,9 +127,7 @@ public class RuleController implements RuleInterface {
 				numbers = 1;
 				break;
 			}
-			if (numbers > fourInDiagonalCounterOne) {
-				fourInDiagonalCounterOne = numbers;
-			}
+			
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}
@@ -185,9 +178,7 @@ public class RuleController implements RuleInterface {
 				break;
 
 			}
-			if (numbers > fourInDiagonalCounterTwo) {
-				fourInDiagonalCounterTwo = numbers;
-			}
+			
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			LOGGER.log(Level.SEVERE, ausnahme, e);
 		}

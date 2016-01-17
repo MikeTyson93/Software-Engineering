@@ -26,6 +26,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 	 * 
 	 */
 	private static final long serialVersionUID = -8169521783214478709L;
+	String fehler = "Ungueltige Spielparameter eingegeben";
 	JButton[] einwerfen;
 	JPanel einwerfenPanel;
 	JTextField lSpieler;
@@ -94,9 +95,9 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 			this.setLayout(new BorderLayout());
 			this.setLocationRelativeTo(null);
 		} catch (Exception x) {
-			JOptionPane.showMessageDialog(null, "Ungueltige Spielparameter eingegeben", "Fehler",
+			JOptionPane.showMessageDialog(null, fehler, "Fehler",
 					JOptionPane.ERROR_MESSAGE);
-			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben", x);
+			LOGGER.log(Level.SEVERE, fehler , x);
 			return;
 		}
 		createPlayers();
@@ -134,7 +135,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Ungültige Spielparameter eingegeben", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
-			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben", x);
+			LOGGER.log(Level.SEVERE,fehler, x);
 			return;
 		}
 		
