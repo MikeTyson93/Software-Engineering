@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import de.htwg.se.ws1516.fourwinning.view.TUI.*;
 import de.htwg.se.ws1516.fourwinning.controller.IGameController;
-import de.htwg.se.ws1516.fourwinning.controller.impl.GameController;
 import de.htwg.se.ws1516.fourwinning.view.GUI.*;
 
 public class FourWinning {
@@ -17,7 +16,6 @@ public class FourWinning {
 	private Tui TextUI;
 	protected IGameController controller;
 	private static FourWinning instance;
-	public GameController spiel;
 	int rows;
 	int columns;
 
