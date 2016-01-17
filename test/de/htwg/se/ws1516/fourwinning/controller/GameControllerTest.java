@@ -57,6 +57,8 @@ public class GameControllerTest {
 		Player p2 = g.getPlayerTwo();
 		assertEquals(p2.getName(), "Michael");
 		assertEquals(g.getState().toString(), "PlayerBuildState");
+		assertEquals(g.getStatusText(), "Players created");
+		assertEquals(g.getStatus(), GameStates.CREATE_PLAYERS);
 	}
 
 	@Test
@@ -135,6 +137,7 @@ public class GameControllerTest {
 		assertEquals(2, g.getRows());
 	}
 	
+	@Test
 	public void testeStates(){
 		g.baueSpielfeld(2, 2);
 		g.setState(new AreaBuildState());
@@ -145,6 +148,41 @@ public class GameControllerTest {
 		assertEquals(g.getState().toString(), "GameRunningState");
 		g.getState().nextState(g);
 		assertEquals(g.getState().toString(), "PlayerChangeState");
+	}
+	
+	@Test
+	public void testeSetSpielFeld(){
+		g.baueSpielfeld(4, 4);
+		g.setSpielfeld(null);
+		assertEquals(g.getSpielfeld(), null);
+	}
+	
+	@Test
+	public void testeRedo(){
+		g.baueSpielfeld(4, 4);
+		g.zug(0, p1);
+		g.redo();
+		g.zug(1, p1);
+		g.redo();
+		g.zug(2, p1);
+		g.redo();
+		g.zug(3, p1);
+		assertEquals(g.spielGewonnen(g.update() , p1), true);
+		
+	}
+	
+	@Test
+	public void testeUndo(){
+		g.baueSpielfeld(4, 4);
+		g.zug(0, p1);
+		g.undo();
+		g.zug(0, p1);
+		g.undo();
+		g.zug(0, p1);
+		g.undo();
+		g.zug(0, p1);
+		assertEquals(g.spielGewonnen(g.update() , p1), true);
+
 	}
 	
 

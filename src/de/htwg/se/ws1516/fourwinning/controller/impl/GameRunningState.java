@@ -8,6 +8,7 @@ public class GameRunningState implements IGameState{
 		game.setState(new PlayerChangeState());
 	}
 	
+	@Override
 	public String toString(){
 		return "GameRunningState";
 	}
