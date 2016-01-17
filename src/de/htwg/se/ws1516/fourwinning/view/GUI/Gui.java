@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.htwg.se.ws1516.fourwinning.view.gui;
 
 import de.htwg.se.ws1516.fourwinning.controller.IGameController;
@@ -99,8 +96,8 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Ungueltige Spielparameter eingegeben", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
-			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben");
-			System.exit(1);
+			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben", x);
+			return;
 		}
 		createPlayers();
 	}
@@ -137,8 +134,8 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Ungültige Spielparameter eingegeben", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
-			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben");
-			System.exit(1);
+			LOGGER.log(Level.SEVERE,"Ungueltige Spielparameter eingegeben", x);
+			return;
 		}
 		
 	}
@@ -172,7 +169,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		if (quelle == zugRedo) {
 			spiel.redo();
 			spielfeld = spiel.update();
-			ausgabe(spielfeld, rows, columns, eins, zwei);
+			ausgabe(rows, columns, eins, zwei);
 			return;
 		}
 
@@ -215,7 +212,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 	@Override
 	public void update(Event e) {
 		if(e == null){
-			ausgabe(spielfeld, rows, columns, eins, zwei);
+			ausgabe(rows, columns, eins, zwei);
 		} else if (e instanceof GameOverEvent){
 			String gameOver = String.format("%n%s hat das Spiel gewonnen!%n", aktiv.getName());
 
@@ -224,20 +221,20 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 		} else if (e instanceof GameDrawEvent){
 			JOptionPane.showMessageDialog(null, "Game Draw!", "",
 					JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			System.exit(0);
 		}
 	}
 	
 
-	public void ausgabe(Feld[][] feld, int rows, int columns, Player eins, Player zwei) {
-		feld = spiel.update();
+	public void ausgabe(int rows, int columns, Player eins, Player zwei) {
+		spielfeld = spiel.update();
 		for (int k = 0; k < rows; k++) {
 			for (int l = 0; l < columns; l++) {
-				if (feld[k][l].getSet()) {
-					if (feld[k][l].getOwner().getName().equals(eins.getName())) {
+				if (spielfeld[k][l].getSet()) {
+					if (spielfeld[k][l].getOwner().getName().equals(eins.getName())) {
 						this.setGelb(k, l);
 						gm.repaint();
-					} else if (feld[k][l].getOwner().getName().equals(zwei.getName())) {
+					} else if (spielfeld[k][l].getOwner().getName().equals(zwei.getName())) {
 						this.setRot(k, l);
 						gm.repaint();
 					}

@@ -16,7 +16,7 @@ import de.htwg.se.ws1516.fourwinning.models.*;
 public class Tui implements IObserver {
 
 	IGameController spiel;
-
+	private static final String NEWLINE = System.getProperty("line.separator");
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
 	private static Scanner eingabe;
 	Player eins;
@@ -35,28 +35,29 @@ public class Tui implements IObserver {
 	}
 
 	public void ausgabe(Feld[][] feld, int rows, int columns, Player eins, Player zwei) {
-		LOGGER.setLevel(Level.INFO);
-		System.out.println("Ausgabe");
+		StringBuilder sb = new StringBuilder();
+		LOGGER.setLevel(Level.FINER);
+		LOGGER.info("Ausgabe");
+		sb.append(NEWLINE);
 		for (int k = 0; k < rows; k++) {
 			for (int l = 0; l < columns; l++) {
 				if (feld[k][l].getSet()) {
 					if (feld[k][l].getOwner().getName().equals(eins.getName())) {
-						String fieldOfP1 = "[X]\t";
-						System.out.printf(fieldOfP1);
+						sb.append("[X]\t");
+						
 					} else if (feld[k][l].getOwner().getName().equals(zwei.getName())) {
-						String fieldOfP2 = "[O]\t";
-						System.out.printf(fieldOfP2);
+						sb.append("[O]\t");
+					
 					}
 				} else {
-					String noSetField = "[ ]\t";
-					System.out.printf(noSetField);
+					sb.append("[ ]\t");
+				
 				}
 			}
-			String seperator = "%n";
-			System.out.printf(seperator);
-
+			sb.append(NEWLINE);
 		}
-
+		String ausgabe = sb.toString();
+		LOGGER.info(ausgabe);
 	}
 
 	public void createGameArea() {
@@ -96,7 +97,7 @@ public class Tui implements IObserver {
 				columns - 1);
 		LOGGER.info(rowExplain);
 
-		System.out.println("Um den letzten Zug zu widerholen, geben sie redo ein");
+		LOGGER.info("Um den letzten Zug zu widerholen, geben sie redo ein");
 		String currentColumnString = eingabe.next();
 		if ("redo".equals(currentColumnString)) {
 			spiel.redo();
