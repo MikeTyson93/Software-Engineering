@@ -93,17 +93,6 @@ public class RuleController implements RuleInterface {
 	}
 
 	@Override
-	public boolean fourDiagonal(Feld[][] f, Player p, int currentRow, int currentColumn) {
-		if (fourDiagLeftToRight(f, p, currentRow, currentColumn) >= 4
-				|| fourDiagRightToLeft(f, p, currentRow, currentColumn) >= 4) {
-			return true;
-		}
-
-		return false;
-
-	}
-
-	@Override
 	public int fourDiagLeftToRight(Feld[][] feld, Player p, int currentRow, int currentColumn) {
 		LOGGER.setLevel(Level.INFO);
 		int numbers = 1;
@@ -225,7 +214,8 @@ public class RuleController implements RuleInterface {
 		LOGGER.setLevel(Level.INFO);
 		
 			if (fourInRow(currentRow, f, p) >= 4 || fourInColumn(currentColumn, f, p) >= 4
-					|| fourDiagonal(f, p, currentRow, currentColumn)) {
+					|| fourDiagLeftToRight(f, p, currentRow, currentColumn) >= 4
+					|| fourDiagRightToLeft(f, p, currentRow, currentColumn) >= 4) {
 				return true;
 			}
 		return false;

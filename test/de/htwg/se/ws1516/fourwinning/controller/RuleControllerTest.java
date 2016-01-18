@@ -111,13 +111,11 @@ public class RuleControllerTest {
 		g.zug(2, p2);
 		g.zug(4, p1);
 		g.zug(3, p2);
-		assertEquals(false, r.fourDiagonal(g.update(), p2,4, 3));
 		g.zug(1, p1);
 		g.zug(2, p2);
 		g.zug(2, p1);
 		g.zug(2, p2);
 		g.zug(3, p1);
-		assertEquals(true, r.fourDiagonal(g.update(), p1, 3,3));
         assertEquals(4, r.fourDiagLeftToRight(g.update(), p1, 3,3));
         g.zug(0, p2);
         g.zug(0, p1);
@@ -125,7 +123,6 @@ public class RuleControllerTest {
         g.zug(0, p1);
         g.zug(4, p2);
         g.zug(0, p1);
-        assertEquals(true, r.fourDiagonal(g.update(), p1, 0, 0));
         assertEquals(5, r.fourDiagLeftToRight(g.update(), p1, 0,0));
 	}
 	
@@ -226,11 +223,11 @@ public class RuleControllerTest {
         g.zug(1,p2);
         g.zug(2,p1);
         g.zug(1,p1);
-        assertEquals(true, r.fourDiagonal(g.update(), p1, 3,1));
+
         assertEquals(4, r.fourDiagRightToLeft(g.update(), p1, 3, 1));
         g.zug(1,p2);
         g.zug(0,p1);
-        assertEquals(true, r.fourDiagonal(g.update(), p1, 4,0));
+
         assertEquals(5, r.fourDiagRightToLeft(g.update(), p1, 4, 0));
         
     }
