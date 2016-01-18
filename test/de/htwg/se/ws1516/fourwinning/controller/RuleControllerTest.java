@@ -47,6 +47,9 @@ public class RuleControllerTest {
 
 	@Test
 	public void testFourInRow() {
+		g.baueSpielfeld(0, 0);
+		
+		assertEquals(1,r.fourInRow(0, g.update(), p1));
 		g.baueSpielfeld(4, 4);
 		assertEquals(1,r.fourInRow(3, g.update(), p1));
 		g.zug(0, p1);
@@ -303,17 +306,131 @@ public class RuleControllerTest {
 		g.baueSpielfeld(4, 4);
 		g.zug(0, p1);
 		g.zug(1, p1);
+		
 		g.zug(2, p1);
+//		assertEquals(false, r.getWin(g.update(), p1, 3, 3));
 		g.zug(3, p2);
+		
+
 		assertEquals(true, r.getWin(g.update(), p1, 3, 3));
     }
     
     @Test
     public void testGetWinColumn(){
-        
+        g.baueSpielfeld(4, 4);
+        g.zug(0, p1);
+        g.zug(0, p1);
+        g.zug(0, p1);
+        g.zug(0, p1);
+        assertEquals(true, r.getWin(g.update(), p1, 0, 0));
     }
     
+    @Test
+    public void testGetWinRowAndColumn(){
+    	g.baueSpielfeld(4, 4);
+    	g.zug(0, p1);
+        g.zug(0, p1);
+        g.zug(0, p1);
+        g.zug(0, p1);
+        g.zug(1, p2);
+        g.zug(1, p2);
+        g.zug(1, p2);
+        g.zug(2, p2);
+        g.zug(2, p2);
+        g.zug(2, p2);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p2);
+		g.zug(1, p1);
+		g.zug(2, p1);
+		g.zug(3, p1);
+		
+		assertEquals(true, r.getWin(g.update(), p1, 0, 0));
+    }
     
+    @Test 
+    public void testGetWinDiagonalEins(){
+    	g.baueSpielfeld(10, 10);
+        g.zug(0, p1);
+        g.zug(1, p1);
+        g.zug(1, p1);
+        g.zug(2, p1);
+        g.zug(2, p1);
+        g.zug(2, p1);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p1);
+        g.zug(3, p2);
+        g.zug(4, p1);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(6, p2);
+        g.zug(6, p1);
+        g.zug(6, p2);
+        g.zug(6, p1);
+        g.zug(6, p2);
+        g.zug(6, p1);
+        g.zug(6, p1); 
+        g.zug(7, p2);
+        g.zug(7, p1);
+        g.zug(7, p2);
+        g.zug(7, p1);
+        g.zug(7, p2);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        assertEquals(true, r.getWin(g.update(), p1,2 , 7));
+    }
+    
+    @Test
+    public void testGetWinDiagonalZwei(){
+    	g.baueSpielfeld(10, 10);
+        g.zug(9, p1);
+        g.zug(8, p1);
+        g.zug(8, p1);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        g.zug(7, p1);
+        g.zug(6, p2);
+        g.zug(6, p2);
+        g.zug(6, p2);
+//        g.zug(6, p2);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p2);
+        g.zug(5, p1);
+        g.zug(5, p1);
+        g.zug(4, p2);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(4, p1);
+        g.zug(4, p2);
+        g.zug(4, p1);
+        g.zug(3, p1);
+        g.zug(3, p1);
+        g.zug(3, p1);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p2);
+        g.zug(3, p1);
+        g.zug(2, p2);
+        g.zug(2, p2);
+        g.zug(2, p1);
+        g.zug(2, p1);
+        g.zug(2, p2);
+        g.zug(2, p1);
+        g.zug(2, p2);
+        g.zug(2, p1);
+        assertEquals(true, r.getWin(g.update(), p1,2 , 2));
+    }
 	
 
 }

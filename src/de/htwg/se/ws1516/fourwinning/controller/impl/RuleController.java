@@ -69,7 +69,7 @@ public class RuleController implements RuleInterface {
 		int i = 0;
 		try {
 			while (i + 1 < row) {
-				if ((feld[i][currentColumn].getOwner() != null && feld[i + 1][currentColumn].getOwner() != null)
+				if ((feld[i][currentColumn].getOwner() != null)
 						&& feld[i][currentColumn].getOwner().equals(p)
 						&& feld[i + 1][currentColumn].getOwner().equals(p)) {
 					numbers++;
@@ -223,14 +223,11 @@ public class RuleController implements RuleInterface {
 	@Override
 	public boolean getWin(Feld[][] f, Player p, int currentRow, int currentColumn) {
 		LOGGER.setLevel(Level.INFO);
-		try {
+		
 			if (fourInRow(currentRow, f, p) >= 4 || fourInColumn(currentColumn, f, p) >= 4
 					|| fourDiagonal(f, p, currentRow, currentColumn)) {
 				return true;
 			}
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
-			LOGGER.log(Level.SEVERE, ausnahme, e);
-		}
 		return false;
 	}
 
