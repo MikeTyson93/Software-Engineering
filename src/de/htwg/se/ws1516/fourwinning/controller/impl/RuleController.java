@@ -103,7 +103,7 @@ public class RuleController implements RuleInterface {
 
 			while (i + 1 < row && j + 1 < column) {
 				if (feld[i + 1][j + 1].getOwner() != null
-						&& (feld[i][j].getOwner().equals(p) && feld[i + 1][j + 1].getOwner().equals(p))) {
+						&& feld[i + 1][j + 1].getOwner().equals(p)) {
 					{
 						numbers++;
 						i++;
@@ -152,7 +152,7 @@ public class RuleController implements RuleInterface {
 			int j = hilfe.get(1);
 			while (i + 1 < row && j - 1 >= 0) {
 				if (feld[i + 1][j - 1].getOwner() != null
-						&& feld[i][j].getOwner().equals(p) && feld[i + 1][j - 1].getOwner().equals(p)) {
+						&&  feld[i + 1][j - 1].getOwner().equals(p)) {
 					{
 						numbers++;
 						i++;

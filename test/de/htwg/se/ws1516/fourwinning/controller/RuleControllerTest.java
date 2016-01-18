@@ -124,6 +124,20 @@ public class RuleControllerTest {
         assertEquals(5, r.fourDiagLeftToRight(g.update(), p1, 0,0));
 	}
 	
+	
+	@Test
+	public void testfourDiagLeftToRightTwo(){
+		g.baueSpielfeld(4, 4);
+		g.zug(0, p1);
+		assertTrue(1 != r.fourDiagLeftToRight(g.update(), p1, 3, 0));
+		g.zug(0, p1);
+		g.zug(1,p2);
+		assertTrue(1 != r.fourDiagLeftToRight(g.update(), p1, 2, 0));
+		g.zug(1, p2);
+		g.zug(1, p2);
+		assertTrue(1 != r.fourDiagLeftToRight(g.update(), p2, 2, 1));
+	}
+	
 	@Test
 	public void testFourDiagonalLeftToRight2() {
         g.baueSpielfeld(10, 10);
@@ -200,6 +214,8 @@ public class RuleControllerTest {
 		assertTrue(test2.get(0) == 2);
 		assertTrue(test2.get(1) == 2);
 	}
+	
+	
 	@Test (expected = ArrayIndexOutOfBoundsException.class)
 	public void testHilfeRightToLeftTwo(){
 		g.baueSpielfeld(4, 4);
@@ -211,8 +227,16 @@ public class RuleControllerTest {
 		assertTrue(test3.get(1) != 3);
 	}
 	
+
+	@Test
+	public void testFourDiagRightToLeftTwo(){
+		g.baueSpielfeld(4, 4);
+		g.zug(3, p1);
+		g.zug(3, p1);
+		g.zug(2, p2);
+		assertTrue(1 == r.fourDiagRightToLeft(g.update(), p1, 2, 3));
+	}
 	
-    
     @Test
     public void testFourDiagonalRightToLeft(){
         g.baueSpielfeld(5,5);
@@ -238,6 +262,12 @@ public class RuleControllerTest {
 
         assertEquals(5, r.fourDiagRightToLeft(g.update(), p1, 4, 0));
         
+    }
+    
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void testExceptiondiagonaltwo(){
+    	g.baueSpielfeld(2, 2);
+    	r.fourDiagLeftToRight(g.update(), p1, 3, 4);
     }
     
     @Test
