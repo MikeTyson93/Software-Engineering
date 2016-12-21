@@ -67,7 +67,7 @@ public class FourWinning {
 		try {
 			LOGGER.setLevel(Level.INFO);
 			FourWinning game = getInstance();
-			game.textUI.createGameArea();
+
 			String continu = "next round";
 			while ("next round" == continu) {
 				continu = game.textUI.runGame();

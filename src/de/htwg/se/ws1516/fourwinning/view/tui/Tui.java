@@ -118,11 +118,13 @@ public class Tui implements IObserver {
 		LOGGER.info(spiel.getStatusText());
 		LOGGER.info("");
 		LOGGER.info("%n%n Schreibe undo, um den Zug rueckgaengig zu machen, ansonsten beliebige taste %n%n");
-		String undo = eingabe.next();
-		if ("undo".equals(undo)) {
-			spiel.undo();
-			spielfeld = spiel.update();
-			return next;
+		if(command == ""){
+			String undo = eingabe.next();
+			if ("undo".equals(undo)) {
+				spiel.undo();
+				spielfeld = spiel.update();
+				return next;
+			}
 		}
 		spiel.notifyObservers(new PlayerChangeEvent());
 		return next;
@@ -170,6 +172,7 @@ public class Tui implements IObserver {
 	@Override
 	public void update(Event e) {
 		if (e == null) {
+			this.spielfeld = spiel.update();
 			ausgabe(spielfeld, rows, columns, eins, zwei);
 			this.aktiv = spiel.aktiverSpieler();
 		} else if (e instanceof GameOverEvent) {
