@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import de.htwg.se.ws1516.fourwinning.view.gui.*;
 import de.htwg.se.ws1516.fourwinning.view.tui.*;
 import de.htwg.se.ws1516.fourwinning.controller.IGameController;
+import de.htwg.se.ws1516.fourwinning.models.Player;
 
 public class FourWinning {
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
@@ -26,7 +27,12 @@ public class FourWinning {
 		
 		textUI = new Tui(controller);
 		graphicUI = new Gui(controller);
+		buildGameArea();
+		buildPlayers();
 		graphicUI.createGameArea();
+		textUI.createGameArea();
+		textUI.createPlayers();
+		graphicUI.createPlayers();
 		instance = null;
 	}
 
@@ -40,7 +46,23 @@ public class FourWinning {
 	public Tui getTui() {
 		return textUI;
 	}
+	
+	public void buildGameArea(){
+		controller.setRows(6);
+		controller.setColumns(7);
+		controller.baueSpielfeld(6, 7);
+	}
 
+	public void buildPlayers(){
+		String one = "Michael";
+		String two = "Stephan";
+		controller.createPlayers(one, two);
+		Player eins = controller.getPlayerOne();
+		Player zwei = controller.getPlayerTwo();
+		eins.setActive(true);
+		zwei.setActive(false);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			LOGGER.setLevel(Level.INFO);

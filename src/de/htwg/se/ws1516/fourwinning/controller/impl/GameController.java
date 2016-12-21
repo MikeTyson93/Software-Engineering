@@ -154,7 +154,6 @@ public class GameController extends Observable implements IGameController {
 		won = spielGewonnen;
 		if (won){
 			notifyObservers(new GameOverEvent());
-			
 		}
 		return won;
 	}
