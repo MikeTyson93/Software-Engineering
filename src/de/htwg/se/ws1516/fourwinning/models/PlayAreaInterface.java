@@ -8,4 +8,5 @@ public interface PlayAreaInterface {
 	void setFeld(Feld[][] zusatzfeld);
 	Feld[][] getFeld();
 	void clearFeld();
+	String toJson();
 }

@@ -16,7 +16,7 @@ public class FourWinning {
 	private static final Logger LOGGER = Logger.getLogger(Tui.class.getName());
 	private Tui textUI;
 	private Gui graphicUI;
-	protected IGameController controller;
+	static protected IGameController controller;
 	private static FourWinning instance;
 	int rows;
 	int columns;
@@ -34,6 +34,10 @@ public class FourWinning {
 		textUI.createPlayers();
 		graphicUI.createPlayers();
 		instance = null;
+	}
+
+	public static IGameController getController(){
+		return controller;
 	}
 
 	public static FourWinning getInstance() throws IOException {

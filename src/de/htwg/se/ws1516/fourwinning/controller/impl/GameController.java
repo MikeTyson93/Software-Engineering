@@ -130,6 +130,7 @@ public class GameController extends Observable implements IGameController {
 	 */
 	@Override
 	public String zug(int column, Player p) {
+		grid.toJson();
 		save(grid.getFeld(), column);
 		currentColumn = column;
 		int statuszug = grid.setChip(column, p);
@@ -161,7 +162,7 @@ public class GameController extends Observable implements IGameController {
 		statusText = "Regeln werden auf Gewinner ueberprueft";
 		
 		won = spielGewonnen;
-		if (won){
+		if (won) {
 			notifyObservers(new GameOverEvent());
 		}
 		return won;

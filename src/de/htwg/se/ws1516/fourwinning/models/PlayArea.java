@@ -1,6 +1,11 @@
 package de.htwg.se.ws1516.fourwinning.models;
 
 import de.htwg.se.ws1516.fourwinning.models.Feld;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Map;
+import java.util.HashMap;
 
 public class PlayArea implements PlayAreaInterface
 {
@@ -82,4 +87,37 @@ public class PlayArea implements PlayAreaInterface
     public void clearFeld(){
         buildArea(this.rows, this.columns);
     }
+
+    @Override
+    public String toJson() {
+        String result = "";
+        try {
+            int rows = this.rows;
+            int columns = this.columns;
+            Map[][] mapMatrix = new HashMap[rows][columns];
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < columns; col++) {
+                    mapMatrix[row][col] = new HashMap();
+                    mapMatrix[row][col].put("feld", getIFeld(row, col));
+                }
+            }
+
+            Map<String, Object> map = new HashMap();
+            map.put("meta", this);
+            map.put("grid", mapMatrix);
+            ObjectMapper mapper = new ObjectMapper();
+
+            result = mapper.writeValueAsString(map);
+        }
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public Feld getFeld(int row, int column) {
+        return this.feld[row][column];
+    }
+
+    public FeldInterface getIFeld(int row, int column) { return getFeld(row, column); }
 }
