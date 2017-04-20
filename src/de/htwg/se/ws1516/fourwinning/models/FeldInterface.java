@@ -4,4 +4,5 @@ public interface FeldInterface {
 	Player getOwner();
 	boolean getSet();
 	void setOwner(Player owner);
+	void setSet(boolean set);
 }

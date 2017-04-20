@@ -26,6 +26,11 @@ public class Feld implements FeldInterface
     public boolean getSet(){
         return isSet;    
     }
+
+    @Override
+    public void setSet(boolean set){
+        this.isSet = set;
+    }
     
     @Override
     public Player getOwner(){

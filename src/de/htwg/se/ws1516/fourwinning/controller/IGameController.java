@@ -13,6 +13,7 @@ public interface IGameController extends IObservable{
 	void baueSpielfeld(int rows, int columns);
 	void createPlayers(String nameOne, String nameTwo);
 	Player aktiverSpieler();
+	Player inAktiverSpieler();
 	Player getPlayerOne();
 	Player getPlayerTwo();
 	Player changePlayer(Player one, Player two);

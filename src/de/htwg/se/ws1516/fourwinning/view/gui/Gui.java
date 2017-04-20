@@ -192,7 +192,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 				spiel.zug(i, aktiv);
 				
 				if (spiel.spielGewonnen(spielfeld, aktiv)) {
-					int dialogResult = JOptionPane.showConfirmDialog (null, "Spiel beendet. Wollen Sie eine weitere Runde spielen?","Warning",dialogButton);
+					int dialogResult = JOptionPane.showConfirmDialog (null, "Spiel beendet. Wollen Sie eine weitere Runde spielen?","Warning",JOptionPane.YES_NO_OPTION);
 					if(dialogResult == JOptionPane.YES_OPTION){
                         spiel.newGame();
 					} else {
@@ -203,7 +203,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 				}
 				
 				if (spiel.spielDraw(spielfeld)) {
-					int dialogResult = JOptionPane.showConfirmDialog (null, "Spiel beendet. Wollen Sie eine weitere Runde spielen?","Warning",dialogButton);
+					int dialogResult = JOptionPane.showConfirmDialog (null, "Spiel beendet. Wollen Sie eine weitere Runde spielen?","Warning",JOptionPane.YES_NO_OPTION);
 					if(dialogResult == JOptionPane.YES_OPTION){
                         spiel.newGame();
 					} else {
@@ -237,8 +237,9 @@ public class Gui extends JFrame implements ActionListener, IObserver {
 					JOptionPane.ERROR_MESSAGE);
 		} else if (e instanceof NewGameEvent){
             ausgabe(rows, columns, eins, zwei);
-            this.aktiv = spiel.aktiverSpieler();
-            String message = "Neues spiel wurde gestartet. Spieler: " + this.aktiv + " ist an der Reihe";
+            this.aktiv = spiel.inAktiverSpieler();
+            // we don't want to get the active one, because it will be changed later before a chip was set
+            String message = "Neues spiel wurde gestartet. Spieler: " + this.aktiv.getName() + " ist an der Reihe";
             JOptionPane.showConfirmDialog(null,
                     message,
                     "Neues Spiel",
@@ -247,6 +248,7 @@ public class Gui extends JFrame implements ActionListener, IObserver {
             for (Component cp : einwerfenPanel.getComponents() ){
                 cp.setEnabled(true);
             }
+            this.spielfeld = spiel.update();
 
         }
 	}

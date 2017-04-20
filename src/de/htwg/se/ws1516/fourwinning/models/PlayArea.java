@@ -23,7 +23,8 @@ public class PlayArea implements PlayAreaInterface
     public void buildArea(int rows, int columns){
         for(int i = 0; i < rows; i++){
             for (int j = 0; j<columns; j++){
-                feld[i][j] = new Feld(i,j,null);
+                this.feld[i][j] = new Feld(i,j,null);
+                this.feld[i][j].setSet(false);
             }
         }
     }

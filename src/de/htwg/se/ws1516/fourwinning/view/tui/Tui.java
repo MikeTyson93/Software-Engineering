@@ -184,9 +184,10 @@ public class Tui implements IObserver {
 		} else if (e instanceof NewGameEvent){
 			this.spielfeld = spiel.update();
 			ausgabe(spielfeld, rows, columns, eins, zwei);
-			this.aktiv = spiel.aktiverSpieler();
-			String newGame = String.format("Neues Spiel begonnen!%n%n Spieler: %s ist an der Reihe.", this.aktiv);
+			this.aktiv = spiel.inAktiverSpieler();
+			String newGame = String.format("Neues Spiel begonnen!%n%n Spieler: %s ist an der Reihe.", this.aktiv.getName());
 			LOGGER.info(newGame);
+			this.spielfeld = spiel.update();
 		}
 	}
 	

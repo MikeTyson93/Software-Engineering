@@ -60,7 +60,7 @@ public class RuleController implements RuleInterface {
 	}
 
 	/*
-	 * Methode berechnet 4 aufeinander liegende Chips und gibt Anzahl der Chips zurück.
+	 * Methode berechnet 4 aufeinander liegende Chips und gibt Anzahl der Chips zurï¿½ck.
 	 */
 	@Override
 	public int fourInColumn(int currentColumn, Feld[][] feld, Player p) {
@@ -227,6 +227,13 @@ public class RuleController implements RuleInterface {
 
 	public int getRow() {
 		return row;
+	}
+
+	public void resetCounters(){
+		this.fourInRowCounter = 1;
+		this.fourInColumnCounter = 1;
+		this.fourInDiagonalCounterOne = 1;
+		this.fourInDiagonalCounterTwo = 1;
 	}
 	
 }
