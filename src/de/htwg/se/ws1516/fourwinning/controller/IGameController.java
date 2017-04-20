@@ -31,4 +31,5 @@ public interface IGameController extends IObservable{
 	void setColumns(int columns);
 	void setState(IGameState state);
 	IGameState getState();
+	void newGame();
 }

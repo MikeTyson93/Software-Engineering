@@ -234,5 +234,9 @@ public class GameController extends Observable implements IGameController {
 		return state;
 	}
 	
-	
+	@Override
+	public void newGame(){
+		grid.clearFeld();
+		notifyObservers(new NewGameEvent());
+	}
 }

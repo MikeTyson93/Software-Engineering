@@ -63,9 +63,9 @@ public class Tui implements IObserver {
 
 	public void createGameArea() {
 		//eingabe = new Scanner(System.in);
-		LOGGER.info("Rows werden von GUI übernommen");
+		LOGGER.info("Rows werden von GUI ï¿½bernommen");
 		rows = spiel.getRows();
-		LOGGER.info("Columns werden von GUI übernommen");
+		LOGGER.info("Columns werden von GUI ï¿½bernommen");
 		columns = spiel.getColumns();
 		LOGGER.info(spiel.getStatusText());
 	}
@@ -181,6 +181,12 @@ public class Tui implements IObserver {
 		} else if (e instanceof GameDrawEvent){
 			String gameDraw = "Draw";
 			LOGGER.info(gameDraw);
+		} else if (e instanceof NewGameEvent){
+			this.spielfeld = spiel.update();
+			ausgabe(spielfeld, rows, columns, eins, zwei);
+			this.aktiv = spiel.aktiverSpieler();
+			String newGame = String.format("Neues Spiel begonnen!%n%n Spieler: %s ist an der Reihe.", this.aktiv);
+			LOGGER.info(newGame);
 		}
 	}
 	

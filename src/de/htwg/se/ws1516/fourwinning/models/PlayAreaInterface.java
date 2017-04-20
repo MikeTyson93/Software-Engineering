@@ -7,4 +7,5 @@ public interface PlayAreaInterface {
 	int getRows();
 	void setFeld(Feld[][] zusatzfeld);
 	Feld[][] getFeld();
+	void clearFeld();
 }

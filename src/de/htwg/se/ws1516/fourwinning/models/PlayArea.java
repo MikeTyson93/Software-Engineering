@@ -76,5 +76,9 @@ public class PlayArea implements PlayAreaInterface
     public void setFeld(Feld[][] zusatzfeld){
     	this.feld = zusatzfeld;
     }
-    
+
+    @Override
+    public void clearFeld(){
+        buildArea(this.rows, this.columns);
+    }
 }
